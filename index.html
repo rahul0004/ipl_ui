@@ -1,0 +1,59 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Drag &amp; Drop Lists for angular.js</title>
+    <!-- Bootstrap -->
+    <link href="../bootstrap-3.3.7/css/bootstrap.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="../bootstrap-3.3.7/js/jquery-3.1.1.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../bootstrap-3.3.7/js/bootstrap.js"></script>
+    <!-- angular is the only dependency! -->
+    <script src="../angular.js"></script>
+    <script src="libs/angular-drag-and-drop-lists.js"></script>
+    <script src="libs/myScript.js"></script>
+</head>
+
+<body ng-app="demo">
+    <dir ng-controller="listCtrl">
+    	<pre>{{ user.allowedTypes | json }}</pre> 
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">IPL List</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul dnd-list="user.teamMembers"
+                        	dnd-allowed-types="user.allowedTypes"
+                        	dnd-disable-if="(user.teamMembers.length >= user.max)" 
+                        	class="list-group">
+                            <li ng-repeat="teamMember in user.teamMembers" 
+                            	dnd-draggable="teamMember"
+                            	dnd-type="players.experties" 
+                            	dnd-moved="user.teamMembers.splice($index, 1)" 
+                            	dnd-selected="model1.selected = teamMember"                            	 
+                            	class="list-group-item">
+                                {{ teamMember.name }} | {{ teamMember.pointsScored }} |
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                    	<input class="form-control" type="text" name="searchTxt" ng-model="players.search">
+
+                        <ul dnd-list="players" class="list-group">
+                            <li ng-repeat="player in players | filter:players.search" dnd-draggable="player" dnd-moved="players.splice($index,1)" dnd-selected="model2.selected" class="list-group-item">
+                                {{ player.name }} | {{ player.pointsScored }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer pull-right">Accenture Inc.</div>
+        </div>
+    </dir>
+</body>
+
+</html>
