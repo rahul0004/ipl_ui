@@ -4,22 +4,21 @@
     <meta charset="UTF-8">
     <title>Drag &amp; Drop Lists for angular.js</title>
     <!-- Bootstrap -->
-    <link href="../bootstrap-3.3.7/css/bootstrap.css" rel="stylesheet">
+    <link href="libs/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="../bootstrap-3.3.7/js/jquery-3.1.1.js"></script>
+    <script src="libs/bootstrap/js/jquery-3.1.1.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="../bootstrap-3.3.7/js/bootstrap.js"></script>
+    <script src="libs/bootstrap/js/bootstrap.js"></script>
     <!-- angular is the only dependency! -->
-    <script src="../angular.js"></script>
+    <script src="libs/angular.js"></script>
     <script src="libs/angular-drag-and-drop-lists.js"></script>
     <script src="libs/myScript.js"></script>
 </head>
 
 <body ng-app="demo">
     <dir ng-controller="listCtrl">
-    	First git change
-		<div class="panel panel-default">
+    	<div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">IPL List</h3>
             </div>
@@ -32,7 +31,7 @@
                         	class="list-group">
                             <li ng-repeat="teamMember in user.teamMembers" 
                             	dnd-draggable="teamMember"
-                            	dnd-type="players.experties" 
+                            	dnd-type="teamMember.experties" 
                             	dnd-moved="user.teamMembers.splice($index, 1)" 
                             	dnd-selected="model1.selected = teamMember"                            	 
                             	class="list-group-item">
