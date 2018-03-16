@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Drag &amp; Drop Lists for angular.js</title>
+    <title>IPL</title>
     <!-- Bootstrap -->
     <link href="libs/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
@@ -14,37 +14,70 @@
     <script src="libs/angular.js"></script>
     <script src="libs/angular-drag-and-drop-lists.js"></script>
     <script src="libs/myScript.js"></script>
+	<script src="libs/lodash.js"></script>
 </head>
-
 <body ng-app="demo">
-    <dir ng-controller="listCtrl">
-    	<div class="panel panel-default">
+    <div ng-controller="listCtrl"> 
+        <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">IPL List</h3>
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
+                    	My Team 
                         <ul dnd-list="user.teamMembers"
-                        	dnd-allowed-types="user.allowedTypes"
-                        	dnd-disable-if="(user.teamMembers.length >= user.max)" 
-                        	class="list-group">
+                        	dnd-disable-if="(user.teamMembers.length >= user.max)"
+							dnd-drop="validateAddedPlayer(item, type)"
+                        	class="list-group" style="min-height: 50px; border: 1px solid red;">
                             <li ng-repeat="teamMember in user.teamMembers" 
                             	dnd-draggable="teamMember"
-                            	dnd-type="teamMember.experties" 
                             	dnd-moved="user.teamMembers.splice($index, 1)" 
                             	dnd-selected="model1.selected = teamMember"                            	 
                             	class="list-group-item">
-                                {{ teamMember.name }} | {{ teamMember.pointsScored }} |
+                                {{ teamMember.name }} | {{ teamMember.pointsScored }} | {{ $index }}
+                            </li>
+                        </ul>
+                        <span ng-if="(user.teamMembers.length >= user.max)"> You have completed your team </span>
+                    </div>
+                    <div class="col-md-3">
+                		Batsman
+                    	<input class="form-control input-sm" type="text" name="searchTxt" ng-model="batsman.search">
+
+                        <ul dnd-list="players" 
+                        	dnd-allowed-types="['batsman']" class="list-group">
+                            <li ng-repeat="player in players | filter:batsman.search | filter:{experties: 'batsman'}" dnd-draggable="player" dnd-copied=""  dnd-selected="model2.selected" class="list-group-item">
+                                {{ player.name }} | {{ player.pointsScored }} | {{ $index }}
                             </li>
                         </ul>
                     </div>
-                    <div class="col-md-6">
-                    	<input class="form-control" type="text" name="searchTxt" ng-model="players.search">
+                    <div class="col-md-3">
+                    	Bowler
+                    	<input class="form-control input-sm" type="text" name="searchTxt" ng-model="bowler.search">
 
-                        <ul dnd-list="players" class="list-group">
-                            <li ng-repeat="player in players | filter:players.search" dnd-draggable="player" dnd-moved="players.splice($index,1)" dnd-selected="model2.selected" class="list-group-item">
-                                {{ player.name }} | {{ player.pointsScored }}
+                        <ul dnd-list="players"
+                        	dnd-allowed-types="['bowler']" class="list-group">
+                            <li ng-repeat="player in players | filter:bowler.search | filter:{experties: 'bowler'}" dnd-draggable="player"
+                            dnd-copied="" 
+                            dnd-selected="model2.selected" 
+                            dnd-type="player.experties" 
+                            class="list-group-item">
+                                {{ player.name }} | {{ player.pointsScored }} | {{ $index }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                    	All Rounder
+                    	<input class="form-control input-sm" type="text" name="searchTxt" ng-model="allRounder.search">
+
+                        <ul dnd-list="players"
+                        	dnd-allowed-types="['all rounder']" class="list-group">
+                            <li ng-repeat="player in players | filter:allRounder.search | filter:{experties: 'all rounder'}" dnd-draggable="player"
+                            dnd-copied="" 
+                            dnd-selected="model2.selected" 
+                            dnd-type="player.experties" 
+                            class="list-group-item">
+                                {{ player.name }} | {{ player.pointsScored }} | {{ $index }}
                             </li>
                         </ul>
                     </div>
@@ -54,5 +87,4 @@
         </div>
     </dir>
 </body>
-
 </html>
