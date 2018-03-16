@@ -1,0 +1,10 @@
+.info {
+	 background-color: #dff0d8;
+	 color: #3c763d;
+}
+
+.toolbar-position {
+	position: absolute;
+    right: 20px;
+    top: 15px;
+}

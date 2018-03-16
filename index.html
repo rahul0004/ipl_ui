@@ -6,6 +6,7 @@
     <!-- Bootstrap -->
     <link href="libs/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+	<link href="css/home.css" rel="stylesheet">
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="libs/bootstrap/js/jquery-3.1.1.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -28,14 +29,15 @@
                     	My Team 
                         <ul dnd-list="user.teamMembers"
                         	dnd-disable-if="(user.teamMembers.length >= user.max)"
-							dnd-drop="validateAddedPlayer(item, type)"
-                        	class="list-group" style="min-height: 50px; border: 1px solid red;">
+							class="list-group" style="min-height: 50px; border: 1px solid red;">
                             <li ng-repeat="teamMember in user.teamMembers" 
                             	dnd-draggable="teamMember"
-                            	dnd-moved="user.teamMembers.splice($index, 1)" 
-                            	dnd-selected="model1.selected = teamMember"                            	 
+                            	dnd-moved="user.teamMembers.splice($index, 1)"
+								dnd-selected="select(teamMember)"
+								ng-class="{'info': selectedTeamMember === teamMember}"
                             	class="list-group-item">
-                                {{ teamMember.name }} | {{ teamMember.pointsScored }} | {{ $index }}
+								<div class="toolbar-position" ng-if="selectedTeamMember === teamMember" ng-include="'views/team-list-toolbar.html'"></div>
+                                <span> {{ teamMember.name }} | {{ teamMember.pointsScored }} | {{ $index }} </span>
                             </li>
                         </ul>
                         <span ng-if="(user.teamMembers.length >= user.max)"> You have completed your team </span>
@@ -46,7 +48,11 @@
 
                         <ul dnd-list="players" 
                         	dnd-allowed-types="['batsman']" class="list-group">
-                            <li ng-repeat="player in players | filter:batsman.search | filter:{experties: 'batsman'}" dnd-draggable="player" dnd-copied=""  dnd-selected="model2.selected" class="list-group-item">
+                            <li ng-repeat="player in players | filter:batsman.search | filter:{experties: 'batsman'}" 
+								dnd-draggable="player" 
+								dnd-moved="moved(player)"   
+								dnd-selected="model2.selected" 
+								class="list-group-item">
                                 {{ player.name }} | {{ player.pointsScored }} | {{ $index }}
                             </li>
                         </ul>
@@ -58,7 +64,7 @@
                         <ul dnd-list="players"
                         	dnd-allowed-types="['bowler']" class="list-group">
                             <li ng-repeat="player in players | filter:bowler.search | filter:{experties: 'bowler'}" dnd-draggable="player"
-                            dnd-copied="" 
+                            dnd-moved="moved(player)"  
                             dnd-selected="model2.selected" 
                             dnd-type="player.experties" 
                             class="list-group-item">
@@ -73,7 +79,7 @@
                         <ul dnd-list="players"
                         	dnd-allowed-types="['all rounder']" class="list-group">
                             <li ng-repeat="player in players | filter:allRounder.search | filter:{experties: 'all rounder'}" dnd-draggable="player"
-                            dnd-copied="" 
+                            dnd-moved="moved(player)" 
                             dnd-selected="model2.selected" 
                             dnd-type="player.experties" 
                             class="list-group-item">

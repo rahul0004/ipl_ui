@@ -5,18 +5,29 @@ app.controller("listCtrl", function($scope) {
 
     $scope.user = {};
     $scope.players = [];
+	$scope.selectedTeamMember = {};	
 	
-	
-	$scope.validateAddedPlayer = function(item, type) {
-		console.log(item, " ", type);
+	/*$scope.validateAddedPlayer = function(item, type) {
 		if($scope.user.teamMembers.length === 0) {
 			return item;	
 		} else if($scope.user.teamMembers && $scope.user.teamMembers.length > 0) {
-			var matchFound = _.find($scope.user.teamMembers, {'id':item.id});
-			if(!matchFound) {
+			if(!_.find($scope.user.teamMembers, {'id':item.id})) {				
 				return item;
-			}			
+			}		
 		}
+	};*/
+	
+	$scope.select = function(item) {
+		$scope.selectedTeamMember = item;
+	};
+	
+	$scope.remove = function(selectedTeamMember){
+		_.remove($scope.user.teamMembers, {'id':selectedTeamMember.id});
+		$scope.players.push(selectedTeamMember);
+	};
+	
+	$scope.moved = function(player) {		
+		_.remove($scope.players, {'id': player.id});		
 	}
 
 
@@ -26,8 +37,7 @@ app.controller("listCtrl", function($scope) {
         position: 4,
         allowedTypes: ['batsman', 'bowler'],
         max: 4,
-        teamMembers: [
-
+        teamMembers: [			
         ]
     };
 
@@ -88,12 +98,14 @@ app.controller("listCtrl", function($scope) {
             experties: "all rounder"
         },
         {
-            id: 9,
+            id: 10,
             name: "Dinesh",
             country: "India",
             pointsScored: 50,
             experties: "all rounder"
         }
     ];
+	
+	$scope.bkpOfPlayers = angular.copy($scope.players);
 
 });
