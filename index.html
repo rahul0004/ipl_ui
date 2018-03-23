@@ -17,6 +17,11 @@
     <script src="libs/myScript.js"></script>
 	<script src="libs/lodash.js"></script>
 </head>
+<!-- 
+add css when user select any player from list say bowler / batsman etc
+if possible apply drag and drop shadow effect
+
+-->
 <body ng-app="demo">
     <div ng-controller="listCtrl"> 
         <div class="panel panel-default">
@@ -38,6 +43,8 @@
                             	class="list-group-item">
 								<div class="toolbar-position" ng-if="selectedTeamMember === teamMember" ng-include="'views/team-list-toolbar.html'"></div>
                                 <span> {{ teamMember.name }} | {{ teamMember.pointsScored }} | {{ $index }} </span>
+                                <span style="margin-left:5px;" ng-if="(teamMember.playingRole.toLowerCase().indexOf('uncapped') != -1)">
+                                uc:</span>
                             </li>
                         </ul>
                         <span ng-if="(user.teamMembers.length >= user.max)"> You have completed your team </span>
@@ -47,13 +54,17 @@
                     	<input class="form-control input-sm" type="text" name="searchTxt" ng-model="batsman.search">
 
                         <ul dnd-list="players" 
-                        	dnd-allowed-types="['batsman']" class="list-group">
-                            <li ng-repeat="player in players | filter:batsman.search | filter:{experties: 'batsman'}" 
+                        	dnd-allowed-types="['Batsman']" class="list-group">
+                            <li ng-repeat="player in players | filter:batsman.search | filter:{playingRole: 'batsman'}" 
 								dnd-draggable="player" 
 								dnd-moved="moved(player)"   
-								dnd-selected="model2.selected" 
+								dnd-selected="model2.selected"
+                                dnd-type="player.playingRole"
+                                dnd-effect-allowed="copyMove"  
 								class="list-group-item">
                                 {{ player.name }} | {{ player.pointsScored }} | {{ $index }}
+                                <span style="margin-left:5px;" ng-if="(player.playingRole.toLowerCase().indexOf('uncapped') != -1)">
+                                uc:</span>
                             </li>
                         </ul>
                     </div>
@@ -63,13 +74,15 @@
 
                         <ul dnd-list="players"
                         	dnd-allowed-types="['bowler']" class="list-group">
-                            <li ng-repeat="player in players | filter:bowler.search | filter:{experties: 'bowler'}" dnd-draggable="player"
+                            <li ng-repeat="player in players | filter:bowler.search | filter:{playingRole: 'bowler'}" dnd-draggable="player"
                             dnd-moved="moved(player)"  
                             dnd-selected="model2.selected" 
-                            dnd-type="player.experties" 
+                            dnd-type="player.playingRole" 
                             class="list-group-item">
-                                {{ player.name }} | {{ player.pointsScored }} | {{ $index }}
-                            </li>
+                                {{ player.name }} | {{ player.pointsScored }} | {{ $index }} 
+                                <span style="margin-left:5px;" ng-if="(player.playingRole.toLowerCase().indexOf('uncapped') != -1)">
+                                uc:</span>
+                            </li>                            
                         </ul>
                     </div>
                     <div class="col-md-3">
@@ -78,15 +91,25 @@
 
                         <ul dnd-list="players"
                         	dnd-allowed-types="['all rounder']" class="list-group">
-                            <li ng-repeat="player in players | filter:allRounder.search | filter:{experties: 'all rounder'}" dnd-draggable="player"
+                            <li ng-repeat="player in players | filter:allRounder.search | filter:{playingRole: 'all rounder'}" dnd-draggable="player"
                             dnd-moved="moved(player)" 
                             dnd-selected="model2.selected" 
-                            dnd-type="player.experties" 
+                            dnd-type="player.playingRole" 
                             class="list-group-item">
                                 {{ player.name }} | {{ player.pointsScored }} | {{ $index }}
+                                <span style="margin-left:5px;" ng-if="(player.playingRole.toLowerCase().indexOf('uncapped') != -1)">
+                                uc:</span>
                             </li>
                         </ul>
                     </div>
+                </div>
+                <div class="row">                    
+                    <div class="col-md-3">
+                        <button name="submit" class="btn btn-primary form-control" ng-click="submitMyTeam();">Submit</button>
+                    </div>
+                    <div class="col-md-9" ng-if="error">
+                        <h4>{{ errorMessage }}</h4>
+                    </div>                    
                 </div>
             </div>
             <div class="panel-footer pull-right">Accenture Inc.</div>
