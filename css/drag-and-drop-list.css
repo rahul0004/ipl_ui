@@ -1,0 +1,8 @@
+.team ul[dnd-list] {
+	min-height: 50px;
+}
+
+.info {
+	 background-color: #dff0d8;
+	 color: #3c763d;
+}

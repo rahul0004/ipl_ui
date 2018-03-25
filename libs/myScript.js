@@ -10,7 +10,7 @@ app.controller("listCtrl", function($scope) {
     $scope.errorMessage = "";
 
     $scope.userTeamConfig = {
-        numberOfBatsmanAllowed: 1,
+        numberOfBatsmanAllowed: 3,
         numberOfBowlerAllowed: 1,
         numberOfAllRounderAllowed: 0,
         numberOfForeginPlayerAllowed: 1,
@@ -80,8 +80,14 @@ app.controller("listCtrl", function($scope) {
 	};
 	
 	$scope.remove = function(selectedTeamMember){
-		_.remove($scope.user.teamMembers, {'pid':selectedTeamMember.pid});
-		$scope.players.push(selectedTeamMember);
+		_.remove($scope.user.teamMembers, {'pid':selectedTeamMember.pid});		
+        if($scope.isSelectedPlayerIsBatsman(selectedTeamMember)) {
+            $scope.batsmen.push(selectedTeamMember);
+        } else if($scope.isSelectedPlayerIsBowler(selectedTeamMember)) {
+            $scope.bowlers.push(selectedTeamMember);
+        } else if($scope.isSelectedPlayerIsAllrounder(selectedTeamMember)) {
+            $scope.allrounders.push(selectedTeamMember);
+        }
         $scope.error = false;
         $scope.errorMessage = "";
 	};
@@ -103,74 +109,7 @@ app.controller("listCtrl", function($scope) {
         ]
     };
 
-    $scope.players2 = [
-        {
-            id: 1,
-            name: "Rahul",
-            country: "India",
-            pointsScored: 10,
-            experties: "bowler"
-        },
-        {
-            id: 2,
-            name: "Aniket",
-            country: "India",
-            pointsScored: 20,
-            experties: "batsman"
-        },
-        {
-            id: 3,
-            name: "Suraj",
-            country: "India",
-            pointsScored: 20,
-            experties: "batsman"
-        },
-        {
-            id: 4,
-            name: "Vaibhav",
-            country: "India",
-            pointsScored: 30,
-            experties: "bowler"
-        },
-        {
-            id: 5,
-            name: "Vijay",
-            country: "India",
-            pointsScored: 30,
-            experties: "all rounder"
-        },
-        {
-            id: 6,
-            name: "Anuj",
-            country: "India",
-            pointsScored: 0,
-            experties: "batsman"
-        },
-        {
-            id: 7,
-            name: "Naveen",
-            country: "India",
-            pointsScored: 20,
-            experties: "bowler"
-        },
-        {
-            id: 9,
-            name: "Richa",
-            country: "India",
-            pointsScored: 50,
-            experties: "all rounder"
-        },
-        {
-            id: 10,
-            name: "Dinesh",
-            country: "India",
-            pointsScored: 50,
-            experties: "all rounder"
-        }
-    ];
 	
-	$scope.bkpOfPlayers = angular.copy($scope.players);
-
     $scope.players = [
         {
             "pid": 1,
@@ -227,7 +166,102 @@ app.controller("listCtrl", function($scope) {
             "playingRole": "Batsman",
             "majorTeams": "India,Abahani Limited,Albert TUTI Patriots,Delhi Daredevils,Gujarat Lions,India A,India Blue,India Under-19s,Indian Board President's XI,Kings XI Punjab,Mumbai Indians,Royal Challengers Bangalore,South Zone,Tamil Nadu",
             "name": "A.B.Devilers"
+        },
+        {
+            "pid": 8,            
+            "country": "India",
+            "pointsScored": 10,
+            "playingRole": "Batsman",
+            "majorTeams": "",
+            "name": "Virat Kohli"
+        },
+        {
+            "pid": 9,            
+            "country": "India",
+            "pointsScored": 10,
+            "playingRole": "Batsman",
+            "majorTeams": "",
+            "name": "Gautam Gambhir"
+        },
+        {
+            "pid": 10,            
+            "country": "India",
+            "pointsScored": 10,
+            "playingRole": "Batsman",
+            "majorTeams": "",
+            "name": "Virendra Sehwag"
+        },
+        {
+            "pid": 11,            
+            "country": "Sri Lanka",
+            "pointsScored": 10,
+            "playingRole": "Batsman",
+            "majorTeams": "",
+            "name": "T. Dilshan"
         }
     ];
+
+    $scope.bkpOfPlayers = angular.copy($scope.players);
+
+    $scope.batsmen = [];
+
+    $scope.bowlers = [];
+
+    $scope.allrounders = [];
+
+    $scope.createRoleArray = function() {
+        for(var i=0; i < $scope.players.length; i++){
+            var selectedPlayer = $scope.players[i];
+            if($scope.isSelectedPlayerIsBatsman(selectedPlayer)) {
+                $scope.batsmen.push(selectedPlayer);
+            } else if($scope.isSelectedPlayerIsBowler(selectedPlayer)) {
+                $scope.bowlers.push(selectedPlayer);
+            } else if($scope.isSelectedPlayerIsAllrounder(selectedPlayer)) {
+                $scope.allrounders.push(selectedPlayer);
+            }
+        }
+    };
+
+
+    $scope.isSelectedPlayerIsBatsman = function(selectedPlayer) {
+        if((selectedPlayer.playingRole.toLowerCase().indexOf('batsman') >= 0) && 
+            (selectedPlayer.playingRole.toLowerCase().indexOf('bowler') === -1) && 
+            (selectedPlayer.playingRole.toLowerCase().indexOf('all rounder') === -1) ) {
+            return true;
+        } else {
+            return false;
+        }  
+    };
+
+    $scope.isSelectedPlayerIsBowler = function(selectedPlayer) { 
+        if((selectedPlayer.playingRole.toLowerCase().indexOf('bowler') >= 0) && 
+            (selectedPlayer.playingRole.toLowerCase().indexOf('batsman') === -1) && 
+            (selectedPlayer.playingRole.toLowerCase().indexOf('all rounder') === -1) ) {
+            return true;
+        } else {
+            return false;
+        }  
+    };
+
+    $scope.isSelectedPlayerIsAllrounder = function(selectedPlayer) { 
+        if((selectedPlayer.playingRole.toLowerCase().indexOf('all rounder') >= 0) && 
+            (selectedPlayer.playingRole.toLowerCase().indexOf('bowler') === -1) && 
+            (selectedPlayer.playingRole.toLowerCase().indexOf('batsman') === -1) ) {
+            return true;
+        } else {
+            return false;
+        }  
+    };
+
+    try{
+        $scope.createRoleArray();
+    }catch(err) {
+        console.log("error in createRoleArray function ", err);
+    }        
+
+    console.log("batsmen..", $scope.batsmen);
+    console.log("bowlers..", $scope.bowlers);
+    console.log("allrounders..", $scope.allrounders);
+
 
 });

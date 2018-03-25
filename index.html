@@ -7,6 +7,7 @@
     <link href="libs/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 	<link href="css/home.css" rel="stylesheet">
+    <link href="css/drag-and-drop-list.css" rel="stylesheet">
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="libs/bootstrap/js/jquery-3.1.1.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -30,11 +31,11 @@ if possible apply drag and drop shadow effect
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-3 team">
                     	My Team 
                         <ul dnd-list="user.teamMembers"
                         	dnd-disable-if="(user.teamMembers.length >= user.max)"
-							class="list-group" style="min-height: 50px; border: 1px solid red;">
+							class="list-group" style="border: 1px solid red;">
                             <li ng-repeat="teamMember in user.teamMembers" 
                             	dnd-draggable="teamMember"
                             	dnd-moved="user.teamMembers.splice($index, 1)"
@@ -53,14 +54,14 @@ if possible apply drag and drop shadow effect
                 		Batsman
                     	<input class="form-control input-sm" type="text" name="searchTxt" ng-model="batsman.search">
 
-                        <ul dnd-list="players" 
+                        <ul dnd-list="batsmen" 
                         	dnd-allowed-types="['Batsman']" class="list-group">
-                            <li ng-repeat="player in players | filter:batsman.search | filter:{playingRole: 'batsman'}" 
+                            <li ng-repeat="player in batsmen | filter:batsman.search | filter:{playingRole: 'batsman'}" 
 								dnd-draggable="player" 
-								dnd-moved="moved(player)"   
-								dnd-selected="model2.selected"
+								dnd-moved="batsmen.splice($index, 1)"
                                 dnd-type="player.playingRole"
-                                dnd-effect-allowed="copyMove"  
+                                dnd-selected="select(player)"
+                                ng-class="{'info': selectedTeamMember === player}"                                  
 								class="list-group-item">
                                 {{ player.name }} | {{ player.pointsScored }} | {{ $index }}
                                 <span style="margin-left:5px;" ng-if="(player.playingRole.toLowerCase().indexOf('uncapped') != -1)">
@@ -72,12 +73,13 @@ if possible apply drag and drop shadow effect
                     	Bowler
                     	<input class="form-control input-sm" type="text" name="searchTxt" ng-model="bowler.search">
 
-                        <ul dnd-list="players"
+                        <ul dnd-list="bowlers"
                         	dnd-allowed-types="['bowler']" class="list-group">
-                            <li ng-repeat="player in players | filter:bowler.search | filter:{playingRole: 'bowler'}" dnd-draggable="player"
-                            dnd-moved="moved(player)"  
-                            dnd-selected="model2.selected" 
-                            dnd-type="player.playingRole" 
+                            <li ng-repeat="player in bowlers | filter:bowler.search | filter:{playingRole: 'bowler'}" dnd-draggable="player"
+                            dnd-moved="bowlers.splice($index, 1)"  
+                            dnd-type="player.playingRole"
+                            dnd-selected="select(player)"
+                            ng-class="{'info': selectedTeamMember === player}"
                             class="list-group-item">
                                 {{ player.name }} | {{ player.pointsScored }} | {{ $index }} 
                                 <span style="margin-left:5px;" ng-if="(player.playingRole.toLowerCase().indexOf('uncapped') != -1)">
@@ -89,12 +91,13 @@ if possible apply drag and drop shadow effect
                     	All Rounder
                     	<input class="form-control input-sm" type="text" name="searchTxt" ng-model="allRounder.search">
 
-                        <ul dnd-list="players"
+                        <ul dnd-list="allrounders"
                         	dnd-allowed-types="['all rounder']" class="list-group">
-                            <li ng-repeat="player in players | filter:allRounder.search | filter:{playingRole: 'all rounder'}" dnd-draggable="player"
-                            dnd-moved="moved(player)" 
-                            dnd-selected="model2.selected" 
-                            dnd-type="player.playingRole" 
+                            <li ng-repeat="player in allrounders | filter:allRounder.search | filter:{playingRole: 'all rounder'}" dnd-draggable="player"
+                            dnd-moved="allrounders.splice($index, 1)" 
+                            dnd-type="player.playingRole"
+                            dnd-selected="select(player)"
+                            ng-class="{'info': selectedTeamMember === player}"
                             class="list-group-item">
                                 {{ player.name }} | {{ player.pointsScored }} | {{ $index }}
                                 <span style="margin-left:5px;" ng-if="(player.playingRole.toLowerCase().indexOf('uncapped') != -1)">
