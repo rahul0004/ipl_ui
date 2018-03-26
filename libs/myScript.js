@@ -82,7 +82,7 @@ app.controller("listCtrl", function($scope, $http) {
 	};
 
     $scope.move = function(item, type) {
-        //console.log(item, type);
+        //console.log("inside move ", item, type);
         if(type === 'batsmen') {
             _.remove($scope.batsmen, {'pid': item.pid});
         } else if(type === 'bowler') {
@@ -175,7 +175,7 @@ app.controller("listCtrl", function($scope, $http) {
     };
     
     $scope.getPlayerList = function() {
-        $http.get('libs/players.htm').then(function onSuccess(response){
+        $http.get('libs/mockData/players.htm').then(function onSuccess(response){
              $scope.players = response.data.players;
              $scope.createRoleArray();            
         }, function onError(response){
@@ -188,6 +188,17 @@ app.controller("listCtrl", function($scope, $http) {
     }catch(err){
         console.log("get players ", err);
     }
+
+    $scope.dropped = function(item, type) {
+        /*
+            this function is used in dnd-drop attr
+            this empty function is delibrately created to takle issue regarding drop within same array 
+            earlier without using this function, if user drags and drop one player in same list then it's removed by the 
+            dnd-move attr.
+            To keep the array intact when user drags and drop player in same list we override dnd-move with dnd-drop
+        */
+        //console.log("inside dropped ", item, type);
+    };
 
 
 });

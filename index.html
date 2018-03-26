@@ -55,7 +55,7 @@ if possible apply drag and drop shadow effect
                     	<input class="form-control input-sm" type="text" name="searchTxt" ng-model="batsman.search">
 
                         <ul dnd-list="batsmen" 
-                        	dnd-allowed-types="['Batsman']" class="list-group">
+                        	dnd-allowed-types="['Batsman']" class="list-group" dnd-drop="dropped(item, type)">
                             <li ng-repeat="player in batsmen | filter:batsman.search | filter:{playingRole: 'batsman'}" 
 								dnd-draggable="player" 
 								dnd-moved="move(player, 'batsmen')"
@@ -74,7 +74,7 @@ if possible apply drag and drop shadow effect
                     	<input class="form-control input-sm" type="text" name="searchTxt" ng-model="bowler.search">
 
                         <ul dnd-list="bowlers"
-                        	dnd-allowed-types="['bowler']" class="list-group">
+                        	dnd-allowed-types="['bowler']" class="list-group" dnd-drop="dropped(item, type)">
                             <li ng-repeat="player in bowlers | filter:bowler.search | filter:{playingRole: 'bowler'}" dnd-draggable="player"
                             dnd-moved="move(player, 'bowler')"  
                             dnd-type="player.playingRole"
@@ -92,7 +92,7 @@ if possible apply drag and drop shadow effect
                     	<input class="form-control input-sm" type="text" name="searchTxt" ng-model="allRounder.search">
 
                         <ul dnd-list="allrounders"
-                        	dnd-allowed-types="['all rounder']" class="list-group">
+                        	dnd-allowed-types="['all rounder']" class="list-group" dnd-drop="dropped(item, type)">
                             <li ng-repeat="player in allrounders | filter:allRounder.search | filter:{playingRole: 'all rounder'}" dnd-draggable="player"
                             dnd-moved="move(player, 'allrounder')" 
                             dnd-type="player.playingRole"
