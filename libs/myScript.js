@@ -189,6 +189,20 @@ app.controller("listCtrl", function($scope, $http) {
         console.log("get players ", err);
     }
 
+    $scope.getUserList = function() {
+        $http.get('libs/mockData/allusers.htm').then(function onSuccess(response){
+            $scope.allUsers = response.data.users;
+        }, function onError(response){
+            $scope.allUsers = [];
+        });
+    };
+
+    try{
+        $scope.getUserList();
+    }catch(err){
+        console.log("get all users ", err);
+    }
+
     $scope.dropped = function(item, type) {
         /*
             this function is used in dnd-drop attr
