@@ -1,6 +1,6 @@
 var app = angular.module("demo", ['dndLists']);
 
-app.controller("listCtrl", function($scope) {
+app.controller("listCtrl", function($scope, $http) {
     
     $scope.user = {};
     $scope.players = [];
@@ -122,98 +122,6 @@ app.controller("listCtrl", function($scope) {
         ]
     };
 
-	
-    $scope.players = [
-        {
-            "pid": 1,
-            "country": "India",
-            "pointsScored": 10,
-            "playingRole": "Wicketkeeper batsman",
-            "majorTeams": "India,Abahani Limited,Albert TUTI Patriots,Delhi Daredevils,Gujarat Lions,India A,India Blue,India Under-19s,Indian Board President's XI,Kings XI Punjab,Mumbai Indians,Royal Challengers Bangalore,South Zone,Tamil Nadu",
-            "name": "Dinesh Karthik"
-        },
-            {
-            "pid": 2,
-            "country": "India",
-            "pointsScored": 10,
-            "playingRole": "Wicketkeeper batsman",
-            "majorTeams": "India,Abahani Limited,Albert TUTI Patriots,Delhi Daredevils,Gujarat Lions,India A,India Blue,India Under-19s,Indian Board President's XI,Kings XI Punjab,Mumbai Indians,Royal Challengers Bangalore,South Zone,Tamil Nadu",
-            "name": "Dhoni"
-        },
-        {
-            "pid": 3,            
-            "country": "India",
-            "pointsScored": 10,
-            "playingRole": "Batsman",
-            "majorTeams": "India,Abahani Limited,Albert TUTI Patriots,Delhi Daredevils,Gujarat Lions,India A,India Blue,India Under-19s,Indian Board President's XI,Kings XI Punjab,Mumbai Indians,Royal Challengers Bangalore,South Zone,Tamil Nadu",
-            "name": "Rohit Sharma"
-        },
-        {
-            "pid": 4,            
-            "country": "India",
-            "pointsScored": 10,
-            "playingRole": "Bowler",
-            "majorTeams": "India,Abahani Limited,Albert TUTI Patriots,Delhi Daredevils,Gujarat Lions,India A,India Blue,India Under-19s,Indian Board President's XI,Kings XI Punjab,Mumbai Indians,Royal Challengers Bangalore,South Zone,Tamil Nadu",
-            "name": "Ashish Nehra"
-        },
-        {
-            "pid": 5,            
-            "country": "India",
-            "pointsScored": 10,
-            "playingRole": "All Rounder",
-            "majorTeams": "India,Abahani Limited,Albert TUTI Patriots,Delhi Daredevils,Gujarat Lions,India A,India Blue,India Under-19s,Indian Board President's XI,Kings XI Punjab,Mumbai Indians,Royal Challengers Bangalore,South Zone,Tamil Nadu",
-            "name": "Hardik Pandya"
-        },
-        {
-            "pid": 6,            
-            "country": "India",
-            "pointsScored": 10,
-            "playingRole": "Uncapped bowler",
-            "majorTeams": "Abahani Limited,Albert TUTI Patriots,Delhi Daredevils,Gujarat Lions,India A,India Blue,India Under-19s,Indian Board President's XI,Kings XI Punjab,Mumbai Indians,Royal Challengers Bangalore,South Zone,Tamil Nadu",
-            "name": "Prithvi Shaw"
-        },
-        {
-            "pid": 7,            
-            "country": "Australia",
-            "pointsScored": 10,
-            "playingRole": "Batsman",
-            "majorTeams": "India,Abahani Limited,Albert TUTI Patriots,Delhi Daredevils,Gujarat Lions,India A,India Blue,India Under-19s,Indian Board President's XI,Kings XI Punjab,Mumbai Indians,Royal Challengers Bangalore,South Zone,Tamil Nadu",
-            "name": "A.B.Devilers"
-        },
-        {
-            "pid": 8,            
-            "country": "India",
-            "pointsScored": 10,
-            "playingRole": "Batsman",
-            "majorTeams": "",
-            "name": "Virat Kohli"
-        },
-        {
-            "pid": 9,            
-            "country": "India",
-            "pointsScored": 10,
-            "playingRole": "Batsman",
-            "majorTeams": "",
-            "name": "Gautam Gambhir"
-        },
-        {
-            "pid": 10,            
-            "country": "India",
-            "pointsScored": 10,
-            "playingRole": "Batsman",
-            "majorTeams": "",
-            "name": "Virendra Sehwag"
-        },
-        {
-            "pid": 11,            
-            "country": "Sri Lanka",
-            "pointsScored": 10,
-            "playingRole": "Batsman",
-            "majorTeams": "",
-            "name": "T. Dilshan"
-        }
-    ];
-
     $scope.bkpOfPlayers = angular.copy($scope.players);
 
     $scope.batsmen = [];
@@ -265,16 +173,21 @@ app.controller("listCtrl", function($scope) {
             return false;
         }  
     };
+    
+    $scope.getPlayerList = function() {
+        $http.get('libs/players.htm').then(function onSuccess(response){
+             $scope.players = response.data.players;
+             $scope.createRoleArray();            
+        }, function onError(response){
+            $scope.players = [];
+        });        
+    };
 
     try{
-        $scope.createRoleArray();
-    }catch(err) {
-        console.log("error in createRoleArray function ", err);
-    }        
-
-    console.log("batsmen..", $scope.batsmen);
-    console.log("bowlers..", $scope.bowlers);
-    console.log("allrounders..", $scope.allrounders);
+        $scope.getPlayerList();
+    }catch(err){
+        console.log("get players ", err);
+    }
 
 
 });
