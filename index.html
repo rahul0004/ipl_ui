@@ -58,7 +58,7 @@ if possible apply drag and drop shadow effect
                         	dnd-allowed-types="['Batsman']" class="list-group">
                             <li ng-repeat="player in batsmen | filter:batsman.search | filter:{playingRole: 'batsman'}" 
 								dnd-draggable="player" 
-								dnd-moved="batsmen.splice($index, 1)"
+								dnd-moved="move(player, 'batsmen')"
                                 dnd-type="player.playingRole"
                                 dnd-selected="select(player)"
                                 ng-class="{'info': selectedTeamMember === player}"                                  
@@ -76,7 +76,7 @@ if possible apply drag and drop shadow effect
                         <ul dnd-list="bowlers"
                         	dnd-allowed-types="['bowler']" class="list-group">
                             <li ng-repeat="player in bowlers | filter:bowler.search | filter:{playingRole: 'bowler'}" dnd-draggable="player"
-                            dnd-moved="bowlers.splice($index, 1)"  
+                            dnd-moved="move(player, 'bowler')"  
                             dnd-type="player.playingRole"
                             dnd-selected="select(player)"
                             ng-class="{'info': selectedTeamMember === player}"
@@ -94,7 +94,7 @@ if possible apply drag and drop shadow effect
                         <ul dnd-list="allrounders"
                         	dnd-allowed-types="['all rounder']" class="list-group">
                             <li ng-repeat="player in allrounders | filter:allRounder.search | filter:{playingRole: 'all rounder'}" dnd-draggable="player"
-                            dnd-moved="allrounders.splice($index, 1)" 
+                            dnd-moved="move(player, 'allrounder')" 
                             dnd-type="player.playingRole"
                             dnd-selected="select(player)"
                             ng-class="{'info': selectedTeamMember === player}"

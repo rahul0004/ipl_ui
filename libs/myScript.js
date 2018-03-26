@@ -1,8 +1,7 @@
 var app = angular.module("demo", ['dndLists']);
 
 app.controller("listCtrl", function($scope) {
-    console.log("inside listCtrl...", $scope);
-
+    
     $scope.user = {};
     $scope.players = [];
 	$scope.selectedTeamMember = {};
@@ -81,6 +80,17 @@ app.controller("listCtrl", function($scope) {
 	$scope.select = function(item) {
 		$scope.selectedTeamMember = item;
 	};
+
+    $scope.move = function(item, type) {
+        //console.log(item, type);
+        if(type === 'batsmen') {
+            _.remove($scope.batsmen, {'pid': item.pid});
+        } else if(type === 'bowler') {
+            _.remove($scope.bowlers, {'pid': item.pid});
+        } else if(type === 'allrounder') {
+            _.remove($scope.allrounders, {'pid': item.pid});
+        }
+    };
 	
 	$scope.remove = function(selectedTeamMember){
 		_.remove($scope.user.teamMembers, {'pid':selectedTeamMember.pid});		
