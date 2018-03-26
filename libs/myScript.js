@@ -10,11 +10,11 @@ app.controller("listCtrl", function($scope) {
     $scope.errorMessage = "";
 
     $scope.userTeamConfig = {
-        numberOfBatsmanAllowed: 3,
-        numberOfBowlerAllowed: 1,
-        numberOfAllRounderAllowed: 0,
-        numberOfForeginPlayerAllowed: 1,
-        numberOfUncappedPlayerAllowed: 1,
+        numberOfBatsmanAllowed: 3, //5
+        numberOfBowlerAllowed: 1, //3
+        numberOfAllRounderAllowed: 0, //2
+        numberOfForeginPlayerAllowed: 1, //4
+        numberOfUncappedPlayerAllowed: 1, //2
         numberOfWicketkeeperAllowed: 1
     };
 
@@ -40,20 +40,23 @@ app.controller("listCtrl", function($scope) {
 			return allowToSubmit;	
 		} else if($scope.user.teamMembers && $scope.user.teamMembers.length > 0) {
 			for(var i=0; i < $scope.user.teamMembers.length; i++) {
-                var selectedTeamMember = $scope.user.teamMembers[i];
-                /* order of if-else is essential as wicketkeeper can an batsman 
-                    an uncapped player can be batsman or bowler */
+                var selectedTeamMember = $scope.user.teamMembers[i];                
                 if(selectedTeamMember.country.toLowerCase().indexOf('india') === -1) {
                     numberOfForeginPlayer++;
-                } else if(selectedTeamMember.playingRole.toLowerCase().indexOf('wicketkeeper') != -1) {
+                } 
+                if(selectedTeamMember.playingRole.toLowerCase().indexOf('wicketkeeper') != -1) {
                     numberOfWicketkeeper++;
-                } else if(selectedTeamMember.playingRole.toLowerCase().indexOf('uncapped') != -1) {
+                } 
+                if(selectedTeamMember.playingRole.toLowerCase().indexOf('uncapped') != -1) {
                     numberOfUncappedPlayer++;
-                } else if(selectedTeamMember.playingRole.toLowerCase().indexOf('batsman') != -1) {
+                } 
+                if(selectedTeamMember.playingRole.toLowerCase().indexOf('batsman') != -1) {
                     numberOfBatsman++;
-                } else if(selectedTeamMember.playingRole.toLowerCase().indexOf('bowler') != -1) {
+                }
+                if(selectedTeamMember.playingRole.toLowerCase().indexOf('bowler') != -1) {
                     numberOfBowler++;
-                } else if(selectedTeamMember.playingRole.toLowerCase().indexOf('all rounder') != -1) {
+                }
+                if(selectedTeamMember.playingRole.toLowerCase().indexOf('all rounder') != -1) {
                     numberOfAllRounder++;
                 }
             }
