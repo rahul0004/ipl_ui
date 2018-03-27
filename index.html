@@ -31,7 +31,7 @@ if possible apply drag and drop shadow effect
             </div>
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-3 team">
+                    <div class="col-md-2 team">
                     	My Team 
                         <ul dnd-list="user.teamMembers"
                         	dnd-disable-if="(user.teamMembers.length >= user.max)"
@@ -50,12 +50,12 @@ if possible apply drag and drop shadow effect
                         </ul>
                         <span ng-if="(user.teamMembers.length >= user.max)"> You have completed your team </span>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                 		Batsman
                     	<input class="form-control input-sm" type="text" name="searchTxt" ng-model="batsman.search">
 
                         <ul dnd-list="batsmen" 
-                        	dnd-allowed-types="['Batsman']" class="list-group" dnd-drop="dropped(item, type)">
+                        	dnd-allowed-types="['Batsman']" class="list-group scrollable" dnd-drop="dropped(item, type)" >
                             <li ng-repeat="player in batsmen | filter:batsman.search | filter:{playingRole: 'batsman'}" 
 								dnd-draggable="player" 
 								dnd-moved="move(player, 'batsmen')"
@@ -69,13 +69,13 @@ if possible apply drag and drop shadow effect
                             </li>
                         </ul>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                     	Bowler
                     	<input class="form-control input-sm" type="text" name="searchTxt" ng-model="bowler.search">
 
                         <ul dnd-list="bowlers"
-                        	dnd-allowed-types="['bowler']" class="list-group" dnd-drop="dropped(item, type)">
-                            <li ng-repeat="player in bowlers | filter:bowler.search | filter:{playingRole: 'bowler'}" dnd-draggable="player"
+                        	dnd-allowed-types="['bowler']" class="list-group scrollable" dnd-drop="dropped(item, type)">
+                            <li ng-repeat="player in bowlers | filter:bowler.search | filter:{playingRole: 'bowler'}" dnd-draggable="player" 
                             dnd-moved="move(player, 'bowler')"  
                             dnd-type="player.playingRole"
                             dnd-selected="select(player)"
@@ -87,13 +87,13 @@ if possible apply drag and drop shadow effect
                             </li>                            
                         </ul>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                     	All Rounder
                     	<input class="form-control input-sm" type="text" name="searchTxt" ng-model="allRounder.search">
 
                         <ul dnd-list="allrounders"
-                        	dnd-allowed-types="['all rounder']" class="list-group" dnd-drop="dropped(item, type)">
-                            <li ng-repeat="player in allrounders | filter:allRounder.search | filter:{playingRole: 'all rounder'}" dnd-draggable="player"
+                        	dnd-allowed-types="['all rounder']" class="list-group scrollable" dnd-drop="dropped(item, type)">
+                            <li ng-repeat="player in allrounders | filter:allRounder.search | filter:{playingRole: 'allrounder'}" dnd-draggable="player"
                             dnd-moved="move(player, 'allrounder')" 
                             dnd-type="player.playingRole"
                             dnd-selected="select(player)"
@@ -104,6 +104,9 @@ if possible apply drag and drop shadow effect
                                 uc:</span>
                             </li>
                         </ul>
+                    </div>
+                    <div class="col-md-4">
+                        show player info here
                     </div>
                 </div>
                 <div class="row">                    

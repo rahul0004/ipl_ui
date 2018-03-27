@@ -1,6 +1,6 @@
 var app = angular.module("demo", ['dndLists']);
 
-app.controller("listCtrl", function($scope, $http) {
+app.controller("listCtrl", function($scope, $http, $window) {
     
     $scope.user = {};
     $scope.players = [];
@@ -8,12 +8,15 @@ app.controller("listCtrl", function($scope, $http) {
     $scope.error = false;
     $scope.errorMessage = "";
 
+    $scope.listHeight = ($window.innerHeight - 40 - 40);
+    console.log("h...", $scope.listHeight);
+    
     $scope.userTeamConfig = {
-        numberOfBatsmanAllowed: 3, //5
-        numberOfBowlerAllowed: 1, //3
-        numberOfAllRounderAllowed: 0, //2
-        numberOfForeginPlayerAllowed: 1, //4
-        numberOfUncappedPlayerAllowed: 1, //2
+        numberOfBatsmanAllowed: 5, 
+        numberOfBowlerAllowed: 3, 
+        numberOfAllRounderAllowed: 2, 
+        numberOfForeginPlayerAllowed: 4, 
+        numberOfUncappedPlayerAllowed: 2, 
         numberOfWicketkeeperAllowed: 1
     };
 
@@ -21,6 +24,11 @@ app.controller("listCtrl", function($scope, $http) {
         console.log("selected team",  $scope.user.teamMembers);
         if($scope.validateAddedPlayer()) {
             console.log("call api and save in db ");
+            $http.post('libs/mockData/user.htm', $scope.user).then(function onSuccess(response){
+                console.log("onSuccess ", response);
+            }, function onError(response){
+                console.log("onError ", response);
+            });
         } else {
             console.log("show error");
         }
@@ -55,7 +63,7 @@ app.controller("listCtrl", function($scope, $http) {
                 if(selectedTeamMember.playingRole.toLowerCase().indexOf('bowler') != -1) {
                     numberOfBowler++;
                 }
-                if(selectedTeamMember.playingRole.toLowerCase().indexOf('all rounder') != -1) {
+                if(selectedTeamMember.playingRole.toLowerCase().indexOf('allrounder') != -1) {
                     numberOfAllRounder++;
                 }
             }
@@ -64,7 +72,7 @@ app.controller("listCtrl", function($scope, $http) {
                 (numberOfBatsman > $scope.userTeamConfig.numberOfBatsmanAllowed) || 
                 (numberOfBowler > $scope.userTeamConfig.numberOfBowlerAllowed) || 
                 (numberOfAllRounder > $scope.userTeamConfig.numberOfAllRounderAllowed) || 
-                (numberOfUncappedPlayer > $scope.userTeamConfig.numberOfUncappedPlayerAllowed) ) {
+                (numberOfUncappedPlayer < $scope.userTeamConfig.numberOfUncappedPlayerAllowed) ) {
                 console.log("do not allow ");
                 allowToSubmit = false;
                 $scope.error = true;
@@ -82,8 +90,7 @@ app.controller("listCtrl", function($scope, $http) {
 	};
 
     $scope.move = function(item, type) {
-        //console.log("inside move ", item, type);
-        if(type === 'batsmen') {
+        if(type === 'batsmen') {	
             _.remove($scope.batsmen, {'pid': item.pid});
         } else if(type === 'bowler') {
             _.remove($scope.bowlers, {'pid': item.pid});
@@ -105,7 +112,7 @@ app.controller("listCtrl", function($scope, $http) {
         $scope.errorMessage = "";
 	};
 	
-	$scope.moved = function(player) {		
+	$scope.moved = function(player) {			
 		_.remove($scope.players, {'pid': player.pid});
         $scope.error = false;
         $scope.errorMessage = "";        	
@@ -116,8 +123,8 @@ app.controller("listCtrl", function($scope, $http) {
         id: "1",
         email: "rahul@abc.com",
         position: 4,
-        allowedTypes: ['batsman', 'bowler', 'all rounder'],
-        max: 4,
+        allowedTypes: ['batsman', 'bowler', 'allrounder'],
+        max: 11,
         teamMembers: [			
         ]
     };
@@ -131,6 +138,7 @@ app.controller("listCtrl", function($scope, $http) {
     $scope.allrounders = [];
 
     $scope.createRoleArray = function() {
+        console.log($scope.players);
         for(var i=0; i < $scope.players.length; i++){
             var selectedPlayer = $scope.players[i];
             if($scope.isSelectedPlayerIsBatsman(selectedPlayer)) {
@@ -147,7 +155,7 @@ app.controller("listCtrl", function($scope, $http) {
     $scope.isSelectedPlayerIsBatsman = function(selectedPlayer) {
         if((selectedPlayer.playingRole.toLowerCase().indexOf('batsman') >= 0) && 
             (selectedPlayer.playingRole.toLowerCase().indexOf('bowler') === -1) && 
-            (selectedPlayer.playingRole.toLowerCase().indexOf('all rounder') === -1) ) {
+            (selectedPlayer.playingRole.toLowerCase().indexOf('allrounder') === -1) ) {
             return true;
         } else {
             return false;
@@ -157,7 +165,7 @@ app.controller("listCtrl", function($scope, $http) {
     $scope.isSelectedPlayerIsBowler = function(selectedPlayer) { 
         if((selectedPlayer.playingRole.toLowerCase().indexOf('bowler') >= 0) && 
             (selectedPlayer.playingRole.toLowerCase().indexOf('batsman') === -1) && 
-            (selectedPlayer.playingRole.toLowerCase().indexOf('all rounder') === -1) ) {
+            (selectedPlayer.playingRole.toLowerCase().indexOf('allrounder') === -1) ) {
             return true;
         } else {
             return false;
@@ -165,7 +173,7 @@ app.controller("listCtrl", function($scope, $http) {
     };
 
     $scope.isSelectedPlayerIsAllrounder = function(selectedPlayer) { 
-        if((selectedPlayer.playingRole.toLowerCase().indexOf('all rounder') >= 0) && 
+        if((selectedPlayer.playingRole.toLowerCase().indexOf('allrounder') >= 0) && 
             (selectedPlayer.playingRole.toLowerCase().indexOf('bowler') === -1) && 
             (selectedPlayer.playingRole.toLowerCase().indexOf('batsman') === -1) ) {
             return true;
@@ -175,8 +183,22 @@ app.controller("listCtrl", function($scope, $http) {
     };
     
     $scope.getPlayerList = function() {
-        $http.get('libs/mockData/players.htm').then(function onSuccess(response){
-             $scope.players = response.data.players;
+        $http.get('http://10.214.208.112:3000/getPlayerList').then(function onSuccess(response){
+             response.data.forEach(function(value, index, arr){
+                var mapPlayer = {
+                    pid: '',
+                    country: '',
+                    pointsScored: '',
+                    playingRole: '',
+                    majorTeams: '',
+                    name: '' 
+                };
+                mapPlayer.pid = value.ipl_players_bio_id;
+                mapPlayer.playingRole = (value.ipl_players_bio_playing_role) ? value.ipl_players_bio_playing_role : "Batsman";
+                mapPlayer.country = value.ipl_players_bio_country;
+                mapPlayer.name = value.ipl_players_bio_name;
+                $scope.players.push(mapPlayer);
+             });
              $scope.createRoleArray();            
         }, function onError(response){
             $scope.players = [];

@@ -3,3 +3,8 @@
     right: 20px;
     top: 15px;
 }
+
+.scrollable {
+	overflow-y: scroll;
+	max-height: 530px;   
+}
