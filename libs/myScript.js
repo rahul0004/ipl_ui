@@ -209,7 +209,8 @@ app.controller("listCtrl", function($scope, $http, $window) {
     };
     
     $scope.getPlayerList = function() {        
-        $http.get('http://10.214.208.22:3000/getPlayerList').then(function onSuccess(response){
+        //$http.get('http://10.214.208.22:3000/getPlayerList').then(function onSuccess(response){
+        $http.get('libs/mockData/db_players.htm').then(function onSuccess(response){
              response.data.forEach(function(value, index, arr){
                 var mapPlayer = {
                     pid: '',
@@ -236,13 +237,7 @@ app.controller("listCtrl", function($scope, $http, $window) {
              $scope.createRoleArray();            
         }, function onError(response){
             $scope.players = [];
-        });
-        /*$http.get('libs/mockData/players.htm').then(function onSuccess(response){
-             $scope.players = response.data.players;
-             $scope.createRoleArray();            
-        }, function onError(response){
-            $scope.players = [];
-        });  */  
+        });          
     };
 
     try{

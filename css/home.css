@@ -12,3 +12,20 @@
 .shadow {
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
+
+.batsman-icon1 {
+	background-image: url('../images/icons/if_Cricket_71198.png');
+	border: 2px solid black;
+    height: 150px;
+    width: 120px;
+    position: absolute;
+    background-repeat: no-repeat;
+
+}
+
+.player-icon{
+	height: 20px;
+	width: 20px;
+	position: absolute;
+	right:20px;
+}
