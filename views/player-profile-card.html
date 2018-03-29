@@ -1,0 +1,39 @@
+<div class="card">
+	<div class="imgcontainer">
+		<object data="images/missing.jpg" type="image/png">
+		    <img src="images/{{selectedTeamMember.pid}}.png" class="avatar"/>
+		</object>
+    </div>
+	<div>
+		<div class="row" >
+			<div class="col-md-12">
+				<p style="font-size: 18px;">{{selectedTeamMember.name}}</p>
+			</div>
+		</div>
+		<div>
+			<table class="table" >
+				<tr>
+					<td>Team</td>
+					<td>{{ selectedTeamMember.iplTeamName}}</td>
+				</tr>
+				<tr>
+					<td>Nationality</td>
+					<td>{{  selectedTeamMember.country }}</td>
+				</tr>
+				<tr>
+					<td>Role</td>
+					<td>{{ selectedTeamMember.playingRole}}</td>
+				</tr>				
+				<tr>
+					<td>Batting Style</td>
+					<td>{{  selectedTeamMember.battingStyle }}</td>
+				</tr>
+				<tr>
+					<td>Bowling Style</td>
+					<td>{{  selectedTeamMember.bowlingStyle }}</td>
+				</tr>
+			</table>
+		</div>	
+	</div>
+
+</div>

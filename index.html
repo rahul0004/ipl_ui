@@ -7,7 +7,8 @@
     <link href="libs/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 	<link href="css/home.css" rel="stylesheet">
-    <link href="css/drag-and-drop-list.css" rel="stylesheet">
+    <link href="css/drag-and-drop-list.css" rel="stylesheet">    
+    <link href="css/player-profile-card.css" rel="stylesheet">
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="libs/bootstrap/js/jquery-3.1.1.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -27,7 +28,7 @@ if possible apply drag and drop shadow effect
     <div ng-controller="listCtrl">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">IPL List</h3>
+                <h3 class="panel-title">IPL List</h3>               
             </div>
             <div class="panel-body">
                 <div class="row">
@@ -35,7 +36,7 @@ if possible apply drag and drop shadow effect
                     	My Team 
                         <ul dnd-list="user.teamMembers"
                         	dnd-disable-if="(user.teamMembers.length >= user.max)"
-							class="list-group" style="border: 1px solid red;">
+							class="list-group shadow" style="border: 1px solid red;">
                             <li ng-repeat="teamMember in user.teamMembers" 
                             	dnd-draggable="teamMember"
                             	dnd-moved="user.teamMembers.splice($index, 1)"
@@ -55,7 +56,7 @@ if possible apply drag and drop shadow effect
                     	<input class="form-control input-sm" type="text" name="searchTxt" ng-model="batsman.search">
 
                         <ul dnd-list="batsmen" 
-                        	dnd-allowed-types="['Batsman']" class="list-group scrollable" dnd-drop="dropped(item, type)" >
+                        	dnd-allowed-types="['Batsman']" class="list-group scrollable shadow" dnd-drop="dropped(item, type)" >
                             <li ng-repeat="player in batsmen | filter:batsman.search | filter:{playingRole: 'batsman'}" 
 								dnd-draggable="player" 
 								dnd-moved="move(player, 'batsmen')"
@@ -74,7 +75,7 @@ if possible apply drag and drop shadow effect
                     	<input class="form-control input-sm" type="text" name="searchTxt" ng-model="bowler.search">
 
                         <ul dnd-list="bowlers"
-                        	dnd-allowed-types="['bowler']" class="list-group scrollable" dnd-drop="dropped(item, type)">
+                        	dnd-allowed-types="['bowler']" class="list-group scrollable shadow" dnd-drop="dropped(item, type)">
                             <li ng-repeat="player in bowlers | filter:bowler.search | filter:{playingRole: 'bowler'}" dnd-draggable="player" 
                             dnd-moved="move(player, 'bowler')"  
                             dnd-type="player.playingRole"
@@ -92,7 +93,7 @@ if possible apply drag and drop shadow effect
                     	<input class="form-control input-sm" type="text" name="searchTxt" ng-model="allRounder.search">
 
                         <ul dnd-list="allrounders"
-                        	dnd-allowed-types="['all rounder']" class="list-group scrollable" dnd-drop="dropped(item, type)">
+                        	dnd-allowed-types="['all rounder']" class="list-group scrollable shadow" dnd-drop="dropped(item, type)">
                             <li ng-repeat="player in allrounders | filter:allRounder.search | filter:{playingRole: 'allrounder'}" dnd-draggable="player"
                             dnd-moved="move(player, 'allrounder')" 
                             dnd-type="player.playingRole"
@@ -106,7 +107,8 @@ if possible apply drag and drop shadow effect
                         </ul>
                     </div>
                     <div class="col-md-4">
-                        show player info here
+                        show player info here                        
+                        <div ng-include="'views/player-profile-card.html'"></div>
                     </div>
                 </div>
                 <div class="row">                    

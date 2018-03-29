@@ -10,7 +10,7 @@ app.controller("listCtrl", function($scope, $http, $window) {
 
     $scope.listHeight = ($window.innerHeight - 40 - 40);
     console.log("h...", $scope.listHeight);
-    
+
     $scope.userTeamConfig = {
         numberOfBatsmanAllowed: 5, 
         numberOfBowlerAllowed: 3, 
@@ -67,7 +67,31 @@ app.controller("listCtrl", function($scope, $http, $window) {
                     numberOfAllRounder++;
                 }
             }
-            if( (numberOfForeginPlayer > $scope.userTeamConfig.numberOfForeginPlayerAllowed) || 
+
+            if(numberOfForeginPlayer > $scope.userTeamConfig.numberOfForeginPlayerAllowed) {
+                $scope.error = true;
+                $scope.errorMessage = "There are more than 4 foreign players in your team.";
+            } else if(numberOfWicketkeeper > $scope.userTeamConfig.numberOfWicketkeeperAllowed) {
+                $scope.error = true;
+                $scope.errorMessage = "There are more than 1 wicket keeper in your team.";
+            } else if(numberOfBatsman > $scope.userTeamConfig.numberOfBatsmanAllowed) {
+                $scope.error = true;
+                $scope.errorMessage = "There are more than 5 batsmen in your team.";
+            } else if(numberOfBowler > $scope.userTeamConfig.numberOfBowlerAllowed) {
+                $scope.error = true;
+                $scope.errorMessage = "There are more than 3 bowlers in your team.";
+            } else if(numberOfAllRounder > $scope.userTeamConfig.numberOfAllRounderAllowed) {
+                $scope.error = true;
+                $scope.errorMessage = "There are more than 2 All rounder in your team.";
+            } else if(numberOfUncappedPlayer < $scope.userTeamConfig.numberOfUncappedPlayerAllowed) {
+                $scope.error = true;
+                $scope.errorMessage = "There are less than 2 Uncapped player in your team.";
+            } else {
+                console.log("allow ");
+                allowToSubmit = true;
+            }
+
+            /*if( (numberOfForeginPlayer > $scope.userTeamConfig.numberOfForeginPlayerAllowed) || 
                 (numberOfWicketkeeper > $scope.userTeamConfig.numberOfWicketkeeperAllowed) || 
                 (numberOfBatsman > $scope.userTeamConfig.numberOfBatsmanAllowed) || 
                 (numberOfBowler > $scope.userTeamConfig.numberOfBowlerAllowed) || 
@@ -80,13 +104,14 @@ app.controller("listCtrl", function($scope, $http, $window) {
             } else {
                 console.log("allow ");
                 allowToSubmit = true;
-            }            		
+            } */           		
 		}
         return allowToSubmit;
 	};
 	
 	$scope.select = function(item) {
 		$scope.selectedTeamMember = item;
+        console.log("selected ", $scope.selectedTeamMember);
 	};
 
     $scope.move = function(item, type) {
@@ -149,6 +174,7 @@ app.controller("listCtrl", function($scope, $http, $window) {
                 $scope.allrounders.push(selectedPlayer);
             }
         }
+        $scope.selectedTeamMember = $scope.batsmen[0];
     };
 
 
@@ -182,8 +208,8 @@ app.controller("listCtrl", function($scope, $http, $window) {
         }  
     };
     
-    $scope.getPlayerList = function() {
-        $http.get('http://10.214.208.112:3000/getPlayerList').then(function onSuccess(response){
+    $scope.getPlayerList = function() {        
+        $http.get('http://10.214.208.22:3000/getPlayerList').then(function onSuccess(response){
              response.data.forEach(function(value, index, arr){
                 var mapPlayer = {
                     pid: '',
@@ -191,18 +217,32 @@ app.controller("listCtrl", function($scope, $http, $window) {
                     pointsScored: '',
                     playingRole: '',
                     majorTeams: '',
-                    name: '' 
+                    name: '' ,
+                    battingStyle: '',
+                    bowlingStyle: '',
+                    category: '',
+                    iplTeamName: ''
                 };
                 mapPlayer.pid = value.ipl_players_bio_id;
                 mapPlayer.playingRole = (value.ipl_players_bio_playing_role) ? value.ipl_players_bio_playing_role : "Batsman";
                 mapPlayer.country = value.ipl_players_bio_country;
                 mapPlayer.name = value.ipl_players_bio_name;
+                mapPlayer.battingStyle = value.ipl_players_bio_bat_style;
+                mapPlayer.bowlingStyle = value.ipl_players_bio_bowl_style;
+                mapPlayer.category = value.ipl_players_bio_category;
+                mapPlayer.iplTeamName = value.ipl_team_name;
                 $scope.players.push(mapPlayer);
              });
              $scope.createRoleArray();            
         }, function onError(response){
             $scope.players = [];
-        });        
+        });
+        /*$http.get('libs/mockData/players.htm').then(function onSuccess(response){
+             $scope.players = response.data.players;
+             $scope.createRoleArray();            
+        }, function onError(response){
+            $scope.players = [];
+        });  */  
     };
 
     try{
