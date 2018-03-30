@@ -9,6 +9,8 @@
 	<link href="css/home.css" rel="stylesheet">
     <link href="css/drag-and-drop-list.css" rel="stylesheet">    
     <link href="css/player-profile-card.css" rel="stylesheet">
+    <link href="css/show-all-users.css" rel="stylesheet">
+     <link href="css/show-user-team.css" rel="stylesheet">
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="libs/bootstrap/js/jquery-3.1.1.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -20,8 +22,7 @@
     <script src="libs/MainCtrl.js"></script>    
     <script src="libs/myScript.js"></script>
 	<script src="libs/lodash.js"></script>
-    <script src="libs/UserPositionCtrl.js"></script>
-    
+    <script src="libs/UserPositionCtrl.js"></script>    
     <base href="/" />    
 </head>
 <!-- 
@@ -29,7 +30,7 @@ add css when user select any player from list say bowler / batsman etc
 if possible apply drag and drop shadow effect
 
 -->
-<body ng-app="demo">
+<body ng-app="ipl">
     <div>
         <header class="header navbar">
             <div class="navbar-nav-scroll">
@@ -40,7 +41,7 @@ if possible apply drag and drop shadow effect
                 </ul>
             </div>            
         </header>
-        <div class="container-fluid">
+        <div class="container-fluid" ng-controller="MainCtrl">
             <ui-view></ui-view>           
         </div>
         <footer class="footer">

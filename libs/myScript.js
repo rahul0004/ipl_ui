@@ -1,30 +1,13 @@
-var app = angular.module("demo");
+var app = angular.module("ipl");
 
-app.controller("listCtrl", function($scope, $http, $window) {
+app.controller("listCtrl", function($scope, $http, $window) {   
     
-    $scope.user = {};
-    $scope.players = [];
-	$scope.selectedTeamMember = {};
-    $scope.error = false;
-    $scope.errorMessage = "";
-
-    $scope.listHeight = ($window.innerHeight - 40 - 40);
-    console.log("h...", $scope.listHeight);
-
-    $scope.userTeamConfig = {
-        numberOfBatsmanAllowed: 5, 
-        numberOfBowlerAllowed: 3, 
-        numberOfAllRounderAllowed: 2, 
-        numberOfForeginPlayerAllowed: 4, 
-        numberOfUncappedPlayerAllowed: 2, 
-        numberOfWicketkeeperAllowed: 1
-    };
 
     $scope.submitMyTeam = function() {
-        console.log("selected team",  $scope.user.teamMembers);
+        console.log("selected team",  $scope.loggedInUser.teamMembers);
         if($scope.validateAddedPlayer()) {
             console.log("call api and save in db ");
-            $http.post('libs/mockData/user.htm', $scope.user).then(function onSuccess(response){
+            $http.post('libs/mockData/user.htm', $scope.loggedInUser).then(function onSuccess(response){
                 console.log("onSuccess ", response);
             }, function onError(response){
                 console.log("onError ", response);
@@ -43,11 +26,11 @@ app.controller("listCtrl", function($scope, $http, $window) {
         var numberOfUncappedPlayer = 0;
         var numberOfWicketkeeper = 0;
 
-		if($scope.user.teamMembers.length === 0) {
+		if($scope.loggedInUser.teamMembers.length === 0) {
 			return allowToSubmit;	
-		} else if($scope.user.teamMembers && $scope.user.teamMembers.length > 0) {
-			for(var i=0; i < $scope.user.teamMembers.length; i++) {
-                var selectedTeamMember = $scope.user.teamMembers[i];                
+		} else if($scope.loggedInUser.teamMembers && $scope.loggedInUser.teamMembers.length > 0) {
+			for(var i=0; i < $scope.loggedInUser.teamMembers.length; i++) {
+                var selectedTeamMember = $scope.loggedInUser.teamMembers[i];                
                 if(selectedTeamMember.country.toLowerCase().indexOf('india') === -1) {
                     numberOfForeginPlayer++;
                 } 
@@ -121,11 +104,11 @@ app.controller("listCtrl", function($scope, $http, $window) {
             _.remove($scope.bowlers, {'pid': item.pid});
         } else if(type === 'allrounder') {
             _.remove($scope.allrounders, {'pid': item.pid});
-        }
+        }        
     };
 	
 	$scope.remove = function(selectedTeamMember){
-		_.remove($scope.user.teamMembers, {'pid':selectedTeamMember.pid});		
+		_.remove($scope.loggedInUser.teamMembers, {'pid':selectedTeamMember.pid});		
         if($scope.isSelectedPlayerIsBatsman(selectedTeamMember)) {
             $scope.batsmen.push(selectedTeamMember);
         } else if($scope.isSelectedPlayerIsBowler(selectedTeamMember)) {
@@ -143,123 +126,6 @@ app.controller("listCtrl", function($scope, $http, $window) {
         $scope.errorMessage = "";        	
 	}
 
-
-    $scope.user = {
-        id: "1",
-        email: "rahul@abc.com",
-        position: 4,
-        allowedTypes: ['batsman', 'bowler', 'allrounder'],
-        max: 11,
-        teamMembers: [			
-        ]
-    };
-
-    $scope.bkpOfPlayers = angular.copy($scope.players);
-
-    $scope.batsmen = [];
-
-    $scope.bowlers = [];
-
-    $scope.allrounders = [];
-
-    $scope.createRoleArray = function() {
-        console.log($scope.players);
-        for(var i=0; i < $scope.players.length; i++){
-            var selectedPlayer = $scope.players[i];
-            if($scope.isSelectedPlayerIsBatsman(selectedPlayer)) {
-                $scope.batsmen.push(selectedPlayer);
-            } else if($scope.isSelectedPlayerIsBowler(selectedPlayer)) {
-                $scope.bowlers.push(selectedPlayer);
-            } else if($scope.isSelectedPlayerIsAllrounder(selectedPlayer)) {
-                $scope.allrounders.push(selectedPlayer);
-            }
-        }
-        $scope.selectedTeamMember = $scope.batsmen[0];
-    };
-
-
-    $scope.isSelectedPlayerIsBatsman = function(selectedPlayer) {
-        if((selectedPlayer.playingRole.toLowerCase().indexOf('batsman') >= 0) && 
-            (selectedPlayer.playingRole.toLowerCase().indexOf('bowler') === -1) && 
-            (selectedPlayer.playingRole.toLowerCase().indexOf('allrounder') === -1) ) {
-            return true;
-        } else {
-            return false;
-        }  
-    };
-
-    $scope.isSelectedPlayerIsBowler = function(selectedPlayer) { 
-        if((selectedPlayer.playingRole.toLowerCase().indexOf('bowler') >= 0) && 
-            (selectedPlayer.playingRole.toLowerCase().indexOf('batsman') === -1) && 
-            (selectedPlayer.playingRole.toLowerCase().indexOf('allrounder') === -1) ) {
-            return true;
-        } else {
-            return false;
-        }  
-    };
-
-    $scope.isSelectedPlayerIsAllrounder = function(selectedPlayer) { 
-        if((selectedPlayer.playingRole.toLowerCase().indexOf('allrounder') >= 0) && 
-            (selectedPlayer.playingRole.toLowerCase().indexOf('bowler') === -1) && 
-            (selectedPlayer.playingRole.toLowerCase().indexOf('batsman') === -1) ) {
-            return true;
-        } else {
-            return false;
-        }  
-    };
-    
-    $scope.getPlayerList = function() {        
-        //$http.get('http://10.214.208.22:3000/getPlayerList').then(function onSuccess(response){
-        $http.get('libs/mockData/db_players.htm').then(function onSuccess(response){
-             response.data.forEach(function(value, index, arr){
-                var mapPlayer = {
-                    pid: '',
-                    country: '',
-                    pointsScored: '',
-                    playingRole: '',
-                    majorTeams: '',
-                    name: '' ,
-                    battingStyle: '',
-                    bowlingStyle: '',
-                    category: '',
-                    iplTeamName: ''
-                };
-                mapPlayer.pid = value.ipl_players_bio_id;
-                mapPlayer.playingRole = (value.ipl_players_bio_playing_role) ? value.ipl_players_bio_playing_role : "Batsman";
-                mapPlayer.country = value.ipl_players_bio_country;
-                mapPlayer.name = value.ipl_players_bio_name;
-                mapPlayer.battingStyle = value.ipl_players_bio_bat_style;
-                mapPlayer.bowlingStyle = value.ipl_players_bio_bowl_style;
-                mapPlayer.category = value.ipl_players_bio_category;
-                mapPlayer.iplTeamName = value.ipl_team_name;
-                $scope.players.push(mapPlayer);
-             });
-             $scope.createRoleArray();            
-        }, function onError(response){
-            $scope.players = [];
-        });          
-    };
-
-    try{
-        $scope.getPlayerList();
-    }catch(err){
-        console.log("get players ", err);
-    }
-
-    $scope.getUserList = function() {
-        $http.get('libs/mockData/allusers.htm').then(function onSuccess(response){
-            $scope.allUsers = response.data.users;
-        }, function onError(response){
-            $scope.allUsers = [];
-        });
-    };
-
-    try{
-        $scope.getUserList();
-    }catch(err){
-        console.log("get all users ", err);
-    }
-
     $scope.dropped = function(item, type) {
         /*
             this function is used in dnd-drop attr
@@ -270,6 +136,11 @@ app.controller("listCtrl", function($scope, $http, $window) {
         */
         //console.log("inside dropped ", item, type);
     };
+
+    $scope.addPlayerInList = function(item) {        
+        $scope.selectedTeamMember = item;
+        return item;
+    }
 
 
 });

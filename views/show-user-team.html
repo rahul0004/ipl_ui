@@ -1,0 +1,29 @@
+<div>
+	<div class="box" ng-repeat="member in loggedInUser.teamMembers">
+		<div class="imgcontainer">
+			<object data="images/missing.jpg" type="image">
+			    <img src="images/player-image/{{member.pid}}.jpg" class="avatar"/>
+			</object>
+	    </div>
+		<div>		
+			<div class="row" >
+				<div class="col-md-12">
+					<p style="font-size: 18px;">{{member.name}}</p>
+				</div>
+			</div>
+			<div>
+				<table class="table">					
+					<tr>
+						<td>Nationality</td>
+						<td>{{  selectedTeamMember.country }}</td>
+					</tr>
+					<tr>
+						<td>Role</td>
+						<td>{{ selectedTeamMember.playingRole}}</td>
+					</tr>
+				</table>
+			</div>	
+		</div>
+
+	</div>
+</div>

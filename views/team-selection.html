@@ -15,12 +15,13 @@
                 <div class="row">
                     <div class="col-md-2 team">
                         My Team 
-                        <ul dnd-list="user.teamMembers"
-                            dnd-disable-if="(user.teamMembers.length >= user.max)"
+                        <ul dnd-list="loggedInUser.teamMembers"
+                            dnd-disable-if="(loggedInUser.teamMembers.length >= loggedInUser.max)" 
+                            dnd-drop="addPlayerInList(item)"                           
                             class="list-group shadow" style="border: 1px solid red;">
-                            <li ng-repeat="teamMember in user.teamMembers" 
+                            <li ng-repeat="teamMember in loggedInUser.teamMembers" 
                                 dnd-draggable="teamMember"
-                                dnd-moved="user.teamMembers.splice($index, 1)"
+                                dnd-moved="loggedInUser.teamMembers.splice($index, 1)"
                                 dnd-selected="select(teamMember)"
                                 ng-class="{'info': selectedTeamMember === teamMember}"
                                 class="list-group-item">

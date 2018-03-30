@@ -1,3 +1,23 @@
-<div ng-controller="UserPositionCtrl">
-	show all users as per ranking here 
+<div ng-controller="UserPositionCtrl">	
+	<div class="row">
+		<div class="col-md-4 top-half-section">
+			Top
+			<ul class="list-group scrollable shadow">
+				<li ng-repeat="user in topHalfMembers | orderBy:'points'"
+					class="list-group-item" 
+					ng-class="{ 'list-group-item-warning' : user.id === loggedInUser.id }">{{ $index }}.  {{ user.email }}</li>
+			</ul>
+		</div>			
+		<div class="col-md-4">
+			Bottom		
+			<ul class="list-group scrollable shadow">
+				<li ng-repeat="user in bottomHalfMembers | orderBy:'points'"
+					class="list-group-item"
+					ng-class="{ 'list-group-item-warning' : user.id === loggedInUser.id }">{{ $index }}.  {{ user.email }}</li>
+			</ul>
+		</div>
+		<div class="col-md-4">
+			<h4>show upcoming matches </h4>
+		</div>
+	</div>	
 </div>
