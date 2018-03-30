@@ -17,7 +17,8 @@
     <script src="libs/angular.js"></script>
     <script src="libs/angular-drag-and-drop-lists.js"></script>    
     <script src="libs/myScript.js"></script>
-	<script src="libs/lodash.js"></script>    
+	<script src="libs/lodash.js"></script>
+    <script src="libs/UserPositionCtrl.js"></script>    
 </head>
 <!-- 
 add css when user select any player from list say bowler / batsman etc
@@ -84,7 +85,7 @@ if possible apply drag and drop shadow effect
                         </ul>
                     </div>
                     <div class="col-md-2">
-                        Bowler <span><img src="images/icons/if_cricket_64051.png" class="player-icon"/></span>
+                        Bowler <span><img src="images/icons/if_cricket_64051.png" class="bowler-icon"/></span>
                         <input class="form-control input-sm" type="text" name="searchTxt" ng-model="bowler.search">
 
                         <ul dnd-list="bowlers"
@@ -129,5 +130,6 @@ if possible apply drag and drop shadow effect
             <div>Accenture Inc.</div>
         </footer>        
     </dir>
+
 </body>
 </html>
