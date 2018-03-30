@@ -1,4 +1,4 @@
-var app = angular.module("demo", ['dndLists']);
+var app = angular.module("demo");
 
 app.controller("listCtrl", function($scope, $http, $window) {
     

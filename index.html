@@ -15,10 +15,14 @@
     <script src="libs/bootstrap/js/bootstrap.js"></script>
     <!-- angular is the only dependency! -->
     <script src="libs/angular.js"></script>
-    <script src="libs/angular-drag-and-drop-lists.js"></script>    
+    <script src="libs/angular-drag-and-drop-lists.js"></script>
+    <script src="libs/angular-ui-router.js"></script>
+    <script src="libs/MainCtrl.js"></script>    
     <script src="libs/myScript.js"></script>
 	<script src="libs/lodash.js"></script>
-    <script src="libs/UserPositionCtrl.js"></script>    
+    <script src="libs/UserPositionCtrl.js"></script>
+    
+    <base href="/" />    
 </head>
 <!-- 
 add css when user select any player from list say bowler / batsman etc
@@ -26,105 +30,18 @@ if possible apply drag and drop shadow effect
 
 -->
 <body ng-app="demo">
-    <div ng-controller="listCtrl">
-        <header class="header">
-            <h3 class="panel-title">IPL List</h3>
+    <div>
+        <header class="header navbar">
+            <div class="navbar-nav-scroll">
+                <ul class="navbar-nav">
+                    <li class="nav-item navlinks"><a class="nav-link " href="javascript:void(0);" ui-sref="add">Add Team</a></li>
+                    <li class="nav-item navlinks"><a class="nav-link " href="javascript:void(0);" ui-sref="view">My Team</a></li>
+                    <li class="nav-item navlinks"><a class="nav-link " href="javascript:void(0);" ui-sref="position">My Position</a></li>
+                </ul>
+            </div>            
         </header>
         <div class="container-fluid">
-            <div  style="padding: 10px;">
-                <div class="row submit-row">                    
-                    <div class="col-md-2">
-                        <button name="submit" class="btn btn-danger form-control" ng-click="submitMyTeam();">Submit</button>
-                    </div>
-                    <div class="col-md-10" ng-if="error">
-                        <p style="margin: 5px 15px 10px;">{{ errorMessage }}</p>
-                    </div>
-                    <div class="col-md-10" ng-if="!error">
-                        <p style="margin: 5px 15px 10px;">
-                        Team can contain max 5 batsmen, 3 bowlers, 2 All rounders, 1 weeketkeeper only. Max 4 All Rounders and Min 2 Uncapped players are must.
-                        </p>
-                    </div>                     
-                </div>
-                <div class="row">
-                    <div class="col-md-2 team">
-                        My Team 
-                        <ul dnd-list="user.teamMembers"
-                            dnd-disable-if="(user.teamMembers.length >= user.max)"
-                            class="list-group shadow" style="border: 1px solid red;">
-                            <li ng-repeat="teamMember in user.teamMembers" 
-                                dnd-draggable="teamMember"
-                                dnd-moved="user.teamMembers.splice($index, 1)"
-                                dnd-selected="select(teamMember)"
-                                ng-class="{'info': selectedTeamMember === teamMember}"
-                                class="list-group-item">
-                                <div class="toolbar-position" ng-if="selectedTeamMember === teamMember" ng-include="'views/team-list-toolbar.html'"></div>
-                                <span> {{ teamMember.name }} </span>
-                                <span style="margin-left:5px;" ng-if="(teamMember.playingRole.toLowerCase().indexOf('uncapped') != -1)">
-                                uc:</span>
-                            </li>
-                        </ul>
-                        <span ng-if="(user.teamMembers.length >= user.max)"> You have completed your team </span>
-                    </div>
-                    <div class="col-md-2">
-                        Batsman <span><img src="images/icons/bat.png" class="player-icon"/></span>
-                        <input class="form-control input-sm" type="text" name="searchTxt" ng-model="batsman.search">
-
-                        <ul dnd-list="batsmen" 
-                            dnd-allowed-types="['Batsman']" class="list-group scrollable shadow" dnd-drop="dropped(item, type)" >
-                            <li ng-repeat="player in batsmen | filter:batsman.search | filter:{playingRole: 'batsman'}" 
-                                dnd-draggable="player" 
-                                dnd-moved="move(player, 'batsmen')"
-                                dnd-type="player.playingRole"
-                                dnd-selected="select(player)"
-                                ng-class="{'info': selectedTeamMember === player}"                                  
-                                class="list-group-item">
-                                {{ player.name }}
-                                <span style="margin-left:5px;" ng-if="(player.playingRole.toLowerCase().indexOf('uncapped') != -1)">
-                                uc:</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-md-2">
-                        Bowler <span><img src="images/icons/if_cricket_64051.png" class="bowler-icon"/></span>
-                        <input class="form-control input-sm" type="text" name="searchTxt" ng-model="bowler.search">
-
-                        <ul dnd-list="bowlers"
-                            dnd-allowed-types="['bowler']" class="list-group scrollable shadow" dnd-drop="dropped(item, type)">
-                            <li ng-repeat="player in bowlers | filter:bowler.search | filter:{playingRole: 'bowler'}" dnd-draggable="player" 
-                            dnd-moved="move(player, 'bowler')"  
-                            dnd-type="player.playingRole"
-                            dnd-selected="select(player)"
-                            ng-class="{'info': selectedTeamMember === player}"
-                            class="list-group-item">
-                                {{ player.name }}
-                                <span style="margin-left:5px;" ng-if="(player.playingRole.toLowerCase().indexOf('uncapped') != -1)">
-                                uc:</span>
-                            </li>                            
-                        </ul>
-                    </div>
-                    <div class="col-md-2">
-                        All Rounder <span><img src="images/icons/if_Cricket_71198.png" class="player-icon"/></span>
-                        <input class="form-control input-sm" type="text" name="searchTxt" ng-model="allRounder.search">
-
-                        <ul dnd-list="allrounders"
-                            dnd-allowed-types="['all rounder']" class="list-group scrollable shadow" dnd-drop="dropped(item, type)">
-                            <li ng-repeat="player in allrounders | filter:allRounder.search | filter:{playingRole: 'allrounder'}" dnd-draggable="player"
-                            dnd-moved="move(player, 'allrounder')" 
-                            dnd-type="player.playingRole"
-                            dnd-selected="select(player)"
-                            ng-class="{'info': selectedTeamMember === player}"
-                            class="list-group-item">
-                                {{ player.name }}
-                                <span style="margin-left:5px;" ng-if="(player.playingRole.toLowerCase().indexOf('uncapped') != -1)">
-                                uc:</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-md-4">                        
-                        <div ng-include="'views/player-profile-card.html'"></div>
-                    </div>
-                </div>                
-            </div>
+            <ui-view></ui-view>           
         </div>
         <footer class="footer">
             <div>Accenture Inc.</div>

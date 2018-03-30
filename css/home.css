@@ -67,3 +67,13 @@
 .submit-row {
 	margin-bottom: 10px;
 }
+
+.navlinks{
+	list-style-type: none;
+    padding: 8px;
+    margin-left: 10px;
+}
+
+a {
+	color:white !important;
+}
