@@ -1,44 +1,89 @@
 <div  style="padding: 10px;" ng-controller="listCtrl">
-                <div class="row submit-row">                    
+                <div class="row submit-row">    
                     <div class="col-md-2">
-                        <button name="submit" class="btn btn-danger form-control" ng-click="submitMyTeam();">Submit</button>
+                        <button name="submit" class="btn btn-danger" ng-click="submitMyTeam();" style="width:100%" ng-disabled="error">Submit</button>
                     </div>
-                    <div class="col-md-10" ng-if="error">
-                        <p style="margin: 5px 15px 10px;">{{ errorMessage }}</p>
-                    </div>
-                    <div class="col-md-10" ng-if="!error">
-                        <p style="margin: 5px 15px 10px;">
+                    <div class="col-md-10">
+                        <div class="progress">
+                                <div class="progress-bar" style="width:10%;"
+                                    ng-class="(validateUserTeamCriteria.numberOfPlayers) ? 'bar-success' : ' progress-bar-danger' ">
+                                    Need 11 players 
+                                </div>
+                                <div class="progress-bar" style="width:10%;"
+                                ng-class="(validateUserTeamCriteria.batsmen) ? 'bar-success' : ' progress-bar-danger' ">
+                                    Need 5 Batsmen 
+                                </div>
+                                <div class="progress-bar" style="width:10%;"
+                                ng-class="(validateUserTeamCriteria.bowlers) ? ' bar-success' : ' progress-bar-danger' ">
+                                    Need 3 Bowlers 
+                                </div>
+                                <div class="progress-bar" style="width:15%;"
+                                ng-class="(validateUserTeamCriteria.wicketkeeper) ? ' bar-success' : ' progress-bar-danger' ">
+                                    Need 1 wicket-keeper 
+                                </div>
+                                <div class="progress-bar" style="width:15%;"
+                                ng-class="(validateUserTeamCriteria.allrounders) ? ' bar-success' : ' progress-bar-danger' ">
+                                    Need 2 All Rounders 
+                                </div>
+                                <div class="progress-bar" style="width:20%;"
+                                ng-class="(validateUserTeamCriteria.foreginPlayers) ? ' bar-success' : ' progress-bar-danger' ">
+                                    Not More than 4 Foreign Players 
+                                </div>
+                                <div class="progress-bar" style="width:20%; border-right: 1px solid black;"
+                                ng-class="(validateUserTeamCriteria.uncappedPlayers) ? ' bar-success' : ' progress-bar-danger' ">
+                                    Atleast 2 Uncapped Players 
+                                </div>
+                            
+                        </div>
+                       <!--  <p style="margin: 5px 15px 10px;">
                         Team can contain max 5 batsmen, 3 bowlers, 2 All rounders, 1 weeketkeeper only. Max 4 All Rounders and Min 2 Uncapped players are must.
-                        </p>
+                        </p> -->
                     </div>                     
                 </div>
                 <div class="row">
-                    <div class="col-md-2 team">
+                    <div class="col-md-3 team">
                         My Team 
                         <ul dnd-list="loggedInUser.teamMembers"
-                            dnd-disable-if="(loggedInUser.teamMembers.length >= loggedInUser.max)" 
+                            dnd-disable-if="(loggedInUser.teamMembers.length >= userTeamConfig.numberOfPlayersAllowed)" 
                             dnd-drop="addPlayerInList(item)"                           
-                            class="list-group shadow" style="border: 1px solid red;">
+                            class="list-group shadow" style="border: 1px solid #5cb85c;">
                             <li ng-repeat="teamMember in loggedInUser.teamMembers" 
                                 dnd-draggable="teamMember"
                                 dnd-moved="loggedInUser.teamMembers.splice($index, 1)"
                                 dnd-selected="select(teamMember)"
                                 ng-class="{'info': selectedTeamMember === teamMember}"
-                                class="list-group-item">
+                                class="list-group-item"
+                                >
+                                <span ng-if="(teamMember.country.toLowerCase().indexOf('india') === -1)"><img src="images/icons/overseas.png" class="foregin-player-icon" style="right:60px !important"/></span>
+                                <span ng-if="(teamMember.playingRole.toLowerCase().indexOf('wicketkeeper') != -1)"><img src="images/icons/keeping-gloves.png" 
+                                    class="keeper-player-icon" style="right:81px !important"/></span>
+                                <span ng-if="(teamMember.playingRole.toLowerCase().indexOf('uncapped') != -1)"><img src="images/icons/uncapped.png" 
+                                    class="foregin-player-icon" style="right:60px !important"/></span>
+                                <span ng-if="isSelectedPlayerIsBatsman(teamMember) === true">
+                                    <img src="images/icons/bat.png" class="user-team-list-player-icon"/>
+                                </span>
+                                <span ng-if="isSelectedPlayerIsBowler(teamMember) === true">
+                                    <img src="images/icons/ball.png" class="user-team-list-player-icon"/>
+                                </span>
+                                <span ng-if="isSelectedPlayerIsAllrounder(teamMember) === true">
+                                    <img src="images/icons/allrounder.png" class="user-team-list-player-icon"/>
+                                </span>                                 
                                 <div class="toolbar-position" ng-if="selectedTeamMember === teamMember" ng-include="'views/team-list-toolbar.html'"></div>
-                                <span> {{ teamMember.name }} </span>
-                                <span style="margin-left:5px;" ng-if="(teamMember.playingRole.toLowerCase().indexOf('uncapped') != -1)">
-                                uc:</span>
+                                <span> {{ teamMember.name }} </span>                                
+                            </li>
+                            <li class="dndPlaceholder">
+                                  <strong > Need {{ userTeamConfig.numberOfPlayersAllowed - loggedInUser.teamMembers.length }}  More </strong> 
                             </li>
                         </ul>
-                        <span ng-if="(user.teamMembers.length >= user.max)"> You have completed your team </span>
+                        <span ng-if="(loggedInUser.teamMembers.length >= userTeamConfig.numberOfPlayersAllowed)"> You have completed your team </span>
                     </div>
                     <div class="col-md-2">
                         Batsman <span><img src="images/icons/bat.png" class="player-icon"/></span>
                         <input class="form-control input-sm" type="text" name="searchTxt" ng-model="batsman.search">
 
                         <ul dnd-list="batsmen" 
-                            dnd-allowed-types="['Batsman']" class="list-group scrollable shadow" dnd-drop="dropped(item, type)" >
+                            dnd-allowed-types="['Batsman']" class="list-group scrollable shadow" dnd-drop="dropped(item, type)" 
+                            >
                             <li ng-repeat="player in batsmen | filter:batsman.search | filter:{playingRole: 'batsman'}" 
                                 dnd-draggable="player" 
                                 dnd-moved="move(player, 'batsmen')"
@@ -46,50 +91,61 @@
                                 dnd-selected="select(player)"
                                 ng-class="{'info': selectedTeamMember === player}"                                  
                                 class="list-group-item">
-                                {{ player.name }}
-                                <span style="margin-left:5px;" ng-if="(player.playingRole.toLowerCase().indexOf('uncapped') != -1)">
-                                uc:</span>
+                                <span ng-if="(player.country.toLowerCase().indexOf('india') === -1)"><img src="images/icons/overseas.png" class="foregin-player-icon"/></span>
+                                <span ng-if="(player.playingRole.toLowerCase().indexOf('wicketkeeper') != -1)"><img src="images/icons/keeping-gloves.png" class="keeper-player-icon"/></span>
+                                <span ng-if="(player.playingRole.toLowerCase().indexOf('uncapped') != -1)"><img src="images/icons/uncapped.png" class="foregin-player-icon"/></span>
+                                {{ player.name }}                                
                             </li>
                         </ul>
                     </div>
                     <div class="col-md-2">
-                        Bowler <span><img src="images/icons/if_cricket_64051.png" class="bowler-icon"/></span>
+                        Bowler <span><img src="images/icons/ball.png" class="bowler-icon"/></span>
                         <input class="form-control input-sm" type="text" name="searchTxt" ng-model="bowler.search">
 
                         <ul dnd-list="bowlers"
-                            dnd-allowed-types="['bowler']" class="list-group scrollable shadow" dnd-drop="dropped(item, type)">
+                            dnd-allowed-types="['bowler']" class="list-group scrollable shadow" dnd-drop="dropped(item, type)"
+                            >
                             <li ng-repeat="player in bowlers | filter:bowler.search | filter:{playingRole: 'bowler'}" dnd-draggable="player" 
                             dnd-moved="move(player, 'bowler')"  
                             dnd-type="player.playingRole"
                             dnd-selected="select(player)"
                             ng-class="{'info': selectedTeamMember === player}"
                             class="list-group-item">
+                            <span ng-if="(player.country.toLowerCase().indexOf('india') === -1)"><img src="images/icons/overseas.png" class="foregin-player-icon"/></span>
                                 {{ player.name }}
-                                <span style="margin-left:5px;" ng-if="(player.playingRole.toLowerCase().indexOf('uncapped') != -1)">
-                                uc:</span>
+                                <span ng-if="(player.playingRole.toLowerCase().indexOf('uncapped') != -1)"><img src="images/icons/uncapped.png" class="foregin-player-icon"/></span>
                             </li>                            
                         </ul>
                     </div>
                     <div class="col-md-2">
-                        All Rounder <span><img src="images/icons/if_Cricket_71198.png" class="player-icon"/></span>
+                        All Rounder <span><img src="images/icons/allrounder.png" class="player-icon"/></span>
                         <input class="form-control input-sm" type="text" name="searchTxt" ng-model="allRounder.search">
 
                         <ul dnd-list="allrounders"
-                            dnd-allowed-types="['all rounder']" class="list-group scrollable shadow" dnd-drop="dropped(item, type)">
+                            dnd-allowed-types="['all rounder']" class="list-group scrollable shadow" dnd-drop="dropped(item, type)"
+                            >
                             <li ng-repeat="player in allrounders | filter:allRounder.search | filter:{playingRole: 'allrounder'}" dnd-draggable="player"
                             dnd-moved="move(player, 'allrounder')" 
                             dnd-type="player.playingRole"
                             dnd-selected="select(player)"
                             ng-class="{'info': selectedTeamMember === player}"
                             class="list-group-item">
+                            <span ng-if="(player.country.toLowerCase().indexOf('india') === -1)"><img src="images/icons/overseas.png" class="foregin-player-icon"/></span>
                                 {{ player.name }}
-                                <span style="margin-left:5px;" ng-if="(player.playingRole.toLowerCase().indexOf('uncapped') != -1)">
-                                uc:</span>
+                                <span ng-if="(player.playingRole.toLowerCase().indexOf('uncapped') != -1)"><img src="images/icons/uncapped.png" class="foregin-player-icon"/></span>
                             </li>
                         </ul>
                     </div>
-                    <div class="col-md-4">                        
+                    <div class="col-md-3">                        
                         <div ng-include="'views/player-profile-card.html'"></div>
                     </div>
-                </div>                
+                </div>
+                <!-- <div class="row">
+                    <div class="col-md-2">
+                        <button name="submit" class="btn btn-danger form-control" ng-click="submitMyTeam();">Submit</button>
+                    </div>
+                    <div class="col-md-10" ng-if="error">
+                        <p style="margin: 5px 15px 10px;">{{ errorMessage }}</p>
+                    </div>                    
+                </div> -->                
             </div>

@@ -23,7 +23,7 @@ var app = angular.module("ipl", ["ui.router","dndLists"])
           $scope.loggedInUser = {};
           $scope.players = [];
           $scope.selectedTeamMember = {};
-          $scope.error = false;
+          $scope.error = true;
           $scope.errorMessage = "";
           $scope.allUsers = [];
 
@@ -35,7 +35,8 @@ var app = angular.module("ipl", ["ui.router","dndLists"])
               numberOfAllRounderAllowed: 2, 
               numberOfForeginPlayerAllowed: 4, 
               numberOfUncappedPlayerAllowed: 2, 
-              numberOfWicketkeeperAllowed: 1
+              numberOfWicketkeeperAllowed: 1,
+              numberOfPlayersAllowed:11
           };
 
           $scope.loggedInUser = {

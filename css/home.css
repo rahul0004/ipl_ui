@@ -1,12 +1,12 @@
 .toolbar-position {
 	position: absolute;
-    right: 20px;
-    top: 15px;
+    right: 4px;
+    top: 9px;
 }
 
 .scrollable {
 	overflow-y: scroll;
-	max-height: 500px;   
+	max-height: 454px;   
 }
 
 .shadow {
@@ -37,6 +37,21 @@
     position: absolute;
     right: 15px;
     top: -2px;
+}
+
+.foregin-player-icon {
+    height: 20px;
+    width: 26px;
+    @position: relative;
+    position: absolute;
+    right: 5px;
+}
+
+.keeper-player-icon {
+    height: 20px;
+    width: 26px;
+    position: absolute;
+    right: 25px;
 }
 
 .header {
@@ -76,4 +91,31 @@
 
 a {
 	color:white !important;
+}
+
+
+.invalid {
+    border: 1px solid red;
+}
+
+.bar-success {
+    background-color: #239d60;
+}
+
+.overseas-player {
+    background-position: -467px -150px;
+    background-image: url('images/global-icons.png');
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border:1px solid red;
+}
+
+.user-team-list-player-icon {
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    right: 35px;
+    top: 10px
 }
