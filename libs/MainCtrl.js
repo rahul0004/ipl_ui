@@ -20,6 +20,9 @@ var app = angular.module("ipl", ["ui.router","dndLists"])
 
         app.controller("MainCtrl", function($scope, $http, $window){
 
+          //$scope.currentDate = new Date();
+          $scope.currentDate = new Date('2018-04-12T14:30:00.000Z');
+
           $scope.loggedInUser = {};
           $scope.players = [];
           $scope.selectedTeamMember = {};
@@ -40,7 +43,7 @@ var app = angular.module("ipl", ["ui.router","dndLists"])
           };
 
           $scope.loggedInUser = {
-              id: "1",
+              id: 3,
               email: "rahul@abc.com",
               position: 4,
               allowedTypes: ['batsman', 'bowler', 'allrounder'],

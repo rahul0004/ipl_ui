@@ -13,3 +13,23 @@ http://support.iconfinder.com/purchasing-and-downloading/what-icon-format-should
 
 how to call an funcion from ng-if 
 https://jsfiddle.net/F2tFj/1500/
+
+
+Unable to access JSON property with “-” dash
+
+https://stackoverflow.com/questions/13869627/unable-to-access-json-property-with-dash
+
+
+https://stackoverflow.com/questions/1050720/adding-hours-to-javascript-date-object
+
+
+convert GMT date to UTC date new Date(value.dateTimeGMT)
+
+//as IST timezone is ahead of GMT by 5h 30m we need to add this time to GMT 
+
+
+compare 2 date object 
+https://stackoverflow.com/questions/7606798/javascript-date-object-comparison
+
+write data to json file
+https://stackoverflow.com/questions/30288087/is-it-possible-to-write-data-to-a-locally-json-file-with-nothing-but-angular

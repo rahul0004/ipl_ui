@@ -1,7 +1,8 @@
 var app = angular.module("ipl");
 
-app.controller("listCtrl", function($scope, $http, $window, $timeout) {   
-    
+app.controller("listCtrl", function($scope, $http, $window, $timeout) {
+
+
     // 58 header + 20 margin, 35 messages 40 footer, 34 sumit line  
     $scope.scrollableHeight = (768 - 78 - 20 - 35 - 40 -34) + 'px';
 
@@ -159,7 +160,6 @@ app.controller("listCtrl", function($scope, $http, $window, $timeout) {
 	
 	$scope.select = function(item) {
 		$scope.selectedTeamMember = item;
-        console.log("selected ", $scope.selectedTeamMember);
 	};
 
     $scope.move = function(item, type) {

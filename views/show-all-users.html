@@ -1,23 +1,52 @@
 <div ng-controller="UserPositionCtrl">	
 	<div class="row">
-		<div class="col-md-4 top-half-section">
-			Top
-			<ul class="list-group scrollable shadow">
-				<li ng-repeat="user in topHalfMembers | orderBy:'points'"
+		<div class="col-md-4">
+			<span style="font-weight:bold;">Top Half</span>
+			<ul class="list-group scrollable shadow" style="max-height: 512px !important;">
+				<li ng-repeat="user in topHalfMembers"
 					class="list-group-item" 
-					ng-class="{ 'list-group-item-warning' : user.id === loggedInUser.id }">{{ $index }}.  {{ user.email }}</li>
+					ng-class="{ 'list-group-item-warning' : user.id === loggedInUser.id }"
+					ng-attr-id="user_{{user.id}}">{{ user.email }}
+					<span class="badge">{{ user.points }}</span>
+				</li>
 			</ul>
 		</div>			
 		<div class="col-md-4">
-			Bottom		
-			<ul class="list-group scrollable shadow">
-				<li ng-repeat="user in bottomHalfMembers | orderBy:'points'"
+			<span style="font-weight:bold;">Botom Half</span>
+			<ul class="list-group scrollable shadow" style="max-height: 512px !important;">
+				<li ng-repeat="user in bottomHalfMembers"
 					class="list-group-item"
-					ng-class="{ 'list-group-item-warning' : user.id === loggedInUser.id }">{{ $index }}.  {{ user.email }}</li>
+					ng-class="{ 'list-group-item-warning' : user.id === loggedInUser.id }"
+					ng-attr-id="user_{{user.id}}">
+					{{ user.email }}
+					<span class="badge">{{ user.points }}</span>
+				</li>
 			</ul>
 		</div>
 		<div class="col-md-4">
-			<h4>show upcoming matches </h4>
+			<span style="font-weight:bold;">Upcoming Matches</span>
+			<ul class="list-group scrollable shadow" style="max-height: 512px !important;">
+				<li ng-repeat="match in upcomingMatches | orderBy:'matchId' | filter:{matchType:'Twenty20'}"
+					class="list-group-item" ng-attr-id="{{match.matchId}}" style="min-height: 100px;"
+					ng-style="{'opacity':( match.dateTimeIST.getTime() >= currentDate.getTime() ) ? '1' : '0.5'}">					
+					<div ng-if="(currentDate | date) === (match.dateTimeIST | date)">
+						<span style="font-weight:bold;color:#239d60;">Playing Today</span></div>
+					<div>
+						<object data="images/ipl-teams/tba.png" type="image">
+						    <img src="{{match.team1ImagePath}}" style="position: relative; left: 30px;" />
+						</object>
+						<object data="images/ipl-teams/tba.png" type="image">
+							<img src="{{match.team2ImagePath}}" style="position: relative; left: 60px;"/>
+						</object>						
+					</div>
+					<div style="text-align: center;">
+						<span style="font-weight: bold;">{{ match.team1 }} vs {{ match.team2}}</span>
+					</div>
+					<div style="text-align: center;">
+						{{ match.dateTimeIST | date: 'MMM d, y  h:mm a'}} (IST)
+					</div>					
+				</li>
+			</ul>
 		</div>
 	</div>	
 </div>
