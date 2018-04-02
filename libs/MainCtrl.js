@@ -1,4 +1,4 @@
-var app = angular.module("ipl", ["ui.router","dndLists"])
+var app = angular.module("ipl", ["ui.router","dndLists","ui.bootstrap"])
         .config(function($stateProvider, $urlMatcherFactoryProvider,$urlRouterProvider,$locationProvider) {
           $urlMatcherFactoryProvider.caseInsensitive(true);
           $urlRouterProvider.otherwise("/add");

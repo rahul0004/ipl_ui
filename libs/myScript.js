@@ -1,7 +1,10 @@
 var app = angular.module("ipl");
 
-app.controller("listCtrl", function($scope, $http, $window, $timeout) {
+app.controller("listCtrl", function($scope, $http, $window, $timeout, $state, $uibModal) {
 
+    //console.log("state..", $state);
+    // once user submits the team redirect user to my team page, once team selction date is closed redirect user to my position page 
+    //$state.go('position');
 
     // 58 header + 20 margin, 35 messages 40 footer, 34 sumit line  
     $scope.scrollableHeight = (768 - 78 - 20 - 35 - 40 -34) + 'px';
@@ -212,6 +215,26 @@ app.controller("listCtrl", function($scope, $http, $window, $timeout) {
         }, 200);
         return item;
     }
+
+
+    $scope.removeConfirmation = function(selectedTeamMember, $index) {
+        var modalInstance = $uibModal.open({
+            templateUrl:'views/remove-player-confirmation-popup.html',
+            controller:'ModalCtrl',
+            size:'sm',
+            resolve: {
+                selectedPlayer: function(){
+                    return selectedTeamMember;
+                }
+            }
+        });
+
+        modalInstance.result.then(function(selectedPlayer){
+            $scope.remove(selectedPlayer, $index);
+        }, function(){
+            //console.log('modal is dismissed');
+        });
+    };
 
     $scope.getStatus = function(member) {
         var status = true;
