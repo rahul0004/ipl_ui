@@ -1,4 +1,4 @@
-var app = angular.module("ipl", ["ui.router","dndLists","ui.bootstrap"])
+var app = angular.module("ipl", ["ui.router","dndLists","ui.bootstrap","toastr"])
         .config(function($stateProvider, $urlMatcherFactoryProvider,$urlRouterProvider,$locationProvider) {
           $urlMatcherFactoryProvider.caseInsensitive(true);
           $urlRouterProvider.otherwise("/add");
@@ -17,6 +17,20 @@ var app = angular.module("ipl", ["ui.router","dndLists","ui.bootstrap"])
                 templateUrl: "views/show-all-users.html"               
               })
           });
+
+        app.config(function(toastrConfig) {
+          angular.extend(toastrConfig, {
+            autoDismiss: true,
+            containerId: 'toast-container',
+            maxOpened: 0,    
+            newestOnTop: true,
+            positionClass: 'toast-bottom-full-width',
+            preventDuplicates: false,
+            preventOpenDuplicates: false,
+            target: 'body',
+            timeOut: 2000,
+          });
+        });
 
         app.controller("MainCtrl", function($scope, $http, $window){
 

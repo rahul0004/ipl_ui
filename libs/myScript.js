@@ -1,6 +1,6 @@
 var app = angular.module("ipl");
 
-app.controller("listCtrl", function($scope, $http, $window, $timeout, $state, $uibModal) {
+app.controller("listCtrl", function($scope, $http, $window, $timeout, $state, $uibModal, toastr) {
 
     //console.log("state..", $state);
     // once user submits the team redirect user to my team page, once team selction date is closed redirect user to my position page 
@@ -231,6 +231,7 @@ app.controller("listCtrl", function($scope, $http, $window, $timeout, $state, $u
 
         modalInstance.result.then(function(selectedPlayer){
             $scope.remove(selectedPlayer, $index);
+            toastr.success(selectedPlayer.name + ' removed successfully', {closeButton: true});
         }, function(){
             //console.log('modal is dismissed');
         });
